@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "Talentário - API",
+                title = "Radar Skill - API",
                 version = "1.0.0",
                 description = "API para gerenciamento de competências técnicas de desenvolvedores. " +
                         "Faça login em /api/auth/login e use o token JWT no botão Authorize."
