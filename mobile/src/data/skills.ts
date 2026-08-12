@@ -1,0 +1,111 @@
+import type { SkillCatalogo } from "../types";
+
+const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
+
+export const SKILL_CATALOG: SkillCatalogo[] = [
+  {
+    id: 1,
+    nome: "Java",
+    categoria: "Backend",
+    imagemUrl: `${DEVICON}/java/java-original.svg`,
+    descricao: "Linguagem robusta e multiplataforma, amplamente usada em sistemas corporativos.",
+  },
+  {
+    id: 2,
+    nome: "Python",
+    categoria: "Dados",
+    imagemUrl: `${DEVICON}/python/python-original.svg`,
+    descricao: "Linguagem versátil para análise de dados, automação e APIs com FastAPI e Django.",
+  },
+  {
+    id: 3,
+    nome: "JavaScript",
+    categoria: "Web",
+    imagemUrl: `${DEVICON}/javascript/javascript-original.svg`,
+    descricao: "Linguagem essencial da web, base de interações dinâmicas e aplicações SPA.",
+  },
+  {
+    id: 4,
+    nome: "React",
+    categoria: "Frontend",
+    imagemUrl: `${DEVICON}/react/react-original.svg`,
+    descricao: "Biblioteca para construir interfaces reativas com componentes reutilizáveis.",
+  },
+  {
+    id: 5,
+    nome: "Node.js",
+    categoria: "Backend",
+    imagemUrl: `${DEVICON}/nodejs/nodejs-original.svg`,
+    descricao: "Runtime JavaScript para backend com arquitetura orientada a eventos.",
+  },
+  {
+    id: 6,
+    nome: "PostgreSQL",
+    categoria: "Banco",
+    imagemUrl: `${DEVICON}/postgresql/postgresql-original.svg`,
+    descricao: "Banco relacional com alto desempenho, índices e otimização de consultas.",
+  },
+  {
+    id: 7,
+    nome: "MongoDB",
+    categoria: "Banco",
+    imagemUrl: `${DEVICON}/mongodb/mongodb-original.svg`,
+    descricao: "Banco NoSQL orientado a documentos, ideal para dados flexíveis.",
+  },
+  {
+    id: 8,
+    nome: "Git",
+    categoria: "Versionamento",
+    imagemUrl: `${DEVICON}/git/git-original.svg`,
+    descricao: "Controle de versão distribuído para colaboração e histórico de código.",
+  },
+  {
+    id: 9,
+    nome: "Docker",
+    categoria: "DevOps",
+    imagemUrl: `${DEVICON}/docker/docker-original.svg`,
+    descricao: "Containerização, microsserviços e integração com pipelines de CI/CD.",
+  },
+  {
+    id: 10,
+    nome: "AWS",
+    categoria: "Cloud",
+    imagemUrl: `${DEVICON}/amazonwebservices/amazonwebservices-original-wordmark.svg`,
+    descricao: "Plataforma de nuvem com serviços escaláveis de computação e armazenamento.",
+  },
+  {
+    id: 11,
+    nome: "Linux",
+    categoria: "Sistemas",
+    imagemUrl: `${DEVICON}/linux/linux-original.svg`,
+    descricao: "Sistema operacional de código aberto, padrão para servidores e DevOps.",
+  },
+  {
+    id: 12,
+    nome: "Figma",
+    categoria: "Design",
+    imagemUrl: `${DEVICON}/figma/figma-original.svg`,
+    descricao: "Ferramenta de design colaborativo para prototipagem e interfaces.",
+  },
+  {
+    id: 13,
+    nome: "Power BI",
+    categoria: "BI",
+    imagemUrl: "",
+    descricao: "Plataforma de BI para visualização e análise de dados de negócio.",
+  },
+  {
+    id: 14,
+    nome: "Kubernetes",
+    categoria: "DevOps",
+    imagemUrl: `${DEVICON}/kubernetes/kubernetes-original.svg`,
+    descricao: "Orquestração de contêineres para escala, deploy e infraestrutura.",
+  },
+  {
+    id: 15,
+    nome: "C++",
+    categoria: "HPC",
+    imagemUrl: `${DEVICON}/cplusplus/cplusplus-original.svg`,
+    descricao: "Linguagem de alta performance para sistemas, jogos e computação científica.",
+  },
+];
