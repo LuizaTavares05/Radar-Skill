@@ -1,0 +1,15 @@
+node_modules
+dist
+.git
+*.tsbuildinfo
+npm-debug.log
+.expo
+
+# backend
+target/
+.mvn/
+mvnw
+mvnw.cmd
+HELP.md
+*.log
+.env
