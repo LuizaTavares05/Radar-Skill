@@ -1,0 +1,16 @@
+### Environment ###
+.env
+*.log
+
+### IDE/Editor ###
+.idea
+*.iws
+*.iml
+*.ipr
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.apt_generated
