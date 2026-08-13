@@ -242,16 +242,12 @@ export default function Dashboard({ email, nome, onLogout }: DashboardProps) {
       </main>
 
       <SkillModal
-        open={modalAberto && !editSkill}
-        onClose={() => setModalAberto(false)}
-        onSave={adicionar}
-        editSkill={null}
-      />
-
-      <SkillModal
-        open={!!editSkill}
-        onClose={() => setEditSkill(null)}
-        onSave={editar}
+        open={modalAberto}
+        onClose={() => {
+          setModalAberto(false);
+          setEditSkill(null);
+        }}
+        onSave={editSkill ? editar : adicionar}
         editSkill={editSkill}
       />
 
