@@ -11,6 +11,7 @@ services:
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
+      - ./.env:/app/.env
       - pgdata:/var/lib/postgresql/data
       - ./backend/database/SistemaSkill.sql:/docker-entrypoint-initdb.d/01-sistema-skill.sql:ro
     healthcheck:
