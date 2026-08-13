@@ -1,12 +1,18 @@
+import { useMemo } from "react";
 import { Layers } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 export default function EmptyState({ query }: { query: string }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <View style={styles.container}>
       <View style={styles.iconBox}>
-        <Layers size={34} color="rgba(10, 78, 119, 0.4)" />
+        <Layers size={34} color={colors.primarySoft} />
       </View>
       <Text style={styles.title}>
         {query ? `Nenhum resultado para "${query}"` : "Nenhuma skill adicionada ainda"}
@@ -20,35 +26,36 @@ export default function EmptyState({ query }: { query: string }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 96,
-    paddingHorizontal: 24,
-  },
-  iconBox: {
-    width: 80,
-    height: 80,
-    borderRadius: radius.md,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
-    backgroundColor: "rgba(10, 78, 119, 0.05)",
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: font.bold,
-    color: colors.textSecondary,
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontFamily: font.regular,
-    color: colors.muted,
-    textAlign: "center",
-    maxWidth: 280,
-    lineHeight: 20,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    container: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 96,
+      paddingHorizontal: 24,
+    },
+    iconBox: {
+      width: 80,
+      height: 80,
+      borderRadius: radius.md,
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 20,
+      backgroundColor: c.primaryTint,
+    },
+    title: {
+      fontSize: 20,
+      fontFamily: font.bold,
+      color: c.textSecondary,
+      textAlign: "center",
+      marginBottom: 8,
+    },
+    subtitle: {
+      fontSize: 14,
+      fontFamily: font.regular,
+      color: c.muted,
+      textAlign: "center",
+      maxWidth: 280,
+      lineHeight: 20,
+    },
+  });

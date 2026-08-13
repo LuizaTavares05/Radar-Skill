@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { ChevronDown, Filter, Search, X } from "lucide-react-native";
 import type { FiltroNivel } from "../types";
 import { NIVEIS } from "../types";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 type SearchBarProps = {
   search: string;
@@ -22,6 +24,8 @@ export default function SearchBar({
   aoMudarFiltro,
   counts,
 }: SearchBarProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [filtroAberto, setFiltroAberto] = useState(false);
   const estaFiltrado = filtroNivel !== "Todos";
 
@@ -98,120 +102,121 @@ export default function SearchBar({
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 12,
-  },
-  searchWrap: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.card,
-    borderRadius: radius.md,
-    borderWidth: 2,
-    borderColor: colors.border,
-    paddingHorizontal: 16,
-    minHeight: 52,
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 15,
-    fontFamily: font.regular,
-    color: colors.foreground,
-    paddingVertical: 12,
-  },
-  clearButton: {
-    padding: 2,
-    marginLeft: 6,
-  },
-  filterWrap: {
-    position: "relative",
-  },
-  filterButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingHorizontal: 14,
-    minHeight: 52,
-    borderRadius: radius.md,
-    borderWidth: 2,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-  },
-  filterButtonActive: {
-    borderColor: colors.primary,
-    backgroundColor: "rgba(10, 78, 119, 0.05)",
-  },
-  filterLabel: {
-    fontSize: 14,
-    fontFamily: font.semibold,
-    color: colors.textSecondary,
-  },
-  filterLabelActive: {
-    color: colors.primary,
-  },
-  chevronOpen: {
-    transform: [{ rotate: "180deg" }],
-  },
-  panel: {
-    position: "absolute",
-    top: "100%",
-    right: 0,
-    marginTop: 8,
-    width: 200,
-    backgroundColor: colors.card,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingVertical: 4,
-    zIndex: 30,
-    shadowColor: colors.foreground,
-    shadowOpacity: 0.12,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  option: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-  optionActive: {
-    backgroundColor: "rgba(10, 78, 119, 0.05)",
-  },
-  optionLabel: {
-    fontSize: 14,
-    fontFamily: font.medium,
-    color: colors.textSecondary,
-  },
-  optionLabelActive: {
-    color: colors.primary,
-    fontFamily: font.semibold,
-  },
-  countBadge: {
-    minWidth: 24,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: radius.full,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-  },
-  countBadgeActive: {
-    backgroundColor: "rgba(10, 78, 119, 0.10)",
-  },
-  countText: {
-    fontSize: 12,
-    fontFamily: font.medium,
-    color: colors.muted,
-  },
-  countTextActive: {
-    color: colors.primary,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      gap: 12,
+    },
+    searchWrap: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: c.card,
+      borderRadius: radius.md,
+      borderWidth: 2,
+      borderColor: c.border,
+      paddingHorizontal: 16,
+      minHeight: 52,
+    },
+    searchIcon: {
+      marginRight: 10,
+    },
+    searchInput: {
+      flex: 1,
+      fontSize: 15,
+      fontFamily: font.regular,
+      color: c.foreground,
+      paddingVertical: 12,
+    },
+    clearButton: {
+      padding: 2,
+      marginLeft: 6,
+    },
+    filterWrap: {
+      position: "relative",
+    },
+    filterButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      paddingHorizontal: 14,
+      minHeight: 52,
+      borderRadius: radius.md,
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.card,
+    },
+    filterButtonActive: {
+      borderColor: c.primary,
+      backgroundColor: c.primaryTint,
+    },
+    filterLabel: {
+      fontSize: 14,
+      fontFamily: font.semibold,
+      color: c.textSecondary,
+    },
+    filterLabelActive: {
+      color: c.primary,
+    },
+    chevronOpen: {
+      transform: [{ rotate: "180deg" }],
+    },
+    panel: {
+      position: "absolute",
+      top: "100%",
+      right: 0,
+      marginTop: 8,
+      width: 200,
+      backgroundColor: c.card,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: c.border,
+      paddingVertical: 4,
+      zIndex: 30,
+      shadowColor: c.foreground,
+      shadowOpacity: 0.12,
+      shadowOffset: { width: 0, height: 4 },
+      shadowRadius: 12,
+      elevation: 8,
+    },
+    option: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 16,
+      paddingVertical: 10,
+    },
+    optionActive: {
+      backgroundColor: c.primaryTint,
+    },
+    optionLabel: {
+      fontSize: 14,
+      fontFamily: font.medium,
+      color: c.textSecondary,
+    },
+    optionLabelActive: {
+      color: c.primary,
+      fontFamily: font.semibold,
+    },
+    countBadge: {
+      minWidth: 24,
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: radius.full,
+      backgroundColor: c.surface,
+      alignItems: "center",
+    },
+    countBadgeActive: {
+      backgroundColor: c.primaryTintStrong,
+    },
+    countText: {
+      fontSize: 12,
+      fontFamily: font.medium,
+      color: c.muted,
+    },
+    countTextActive: {
+      color: c.primary,
+    },
+  });

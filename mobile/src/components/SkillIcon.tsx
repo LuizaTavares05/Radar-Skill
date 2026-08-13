@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Text } from "react-native";
 import { SvgUri } from "react-native-svg";
-import { colors, font } from "../theme";
+import { font } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 type SkillIconProps = {
   nome: string;
@@ -10,6 +11,7 @@ type SkillIconProps = {
 };
 
 export default function SkillIcon({ nome, imagemUrl, size = 44 }: SkillIconProps) {
+  const { colors } = useTheme();
   const [failed, setFailed] = useState(!imagemUrl);
   if (failed) {
     return (
@@ -19,11 +21,6 @@ export default function SkillIcon({ nome, imagemUrl, size = 44 }: SkillIconProps
     );
   }
   return (
-    <SvgUri
-      uri={imagemUrl}
-      width={size}
-      height={size}
-      onError={() => setFailed(true)}
-    />
+    <SvgUri uri={imagemUrl} width={size} height={size} onError={() => setFailed(true)} />
   );
 }

@@ -13,17 +13,32 @@ import Login from "./src/pages/Login";
 import Register from "./src/pages/Register";
 import Dashboard from "./src/pages/Dashboard";
 import Toaster, { toast } from "./src/components/Toast";
+import { ThemeProvider, useTheme } from "./src/context/ThemeContext";
 import {
   hidratar,
   limparNomeUsuario,
   limparToken,
   obterEmailUsuario,
+  obterLembrarPersistidoAsync,
   obterNomeUsuario,
   obterToken,
 } from "./src/auth";
-import { colors } from "./src/theme";
+
+function BootScreen() {
+  const { colors } = useTheme();
+  return <View style={[styles.boot, { backgroundColor: colors.background }]} />;
+}
 
 export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
+}
+
+function AppContent() {
+  const { pronto, definirTema } = useTheme();
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
@@ -61,13 +76,16 @@ export default function App() {
     setEmailUsuario(null);
     setNomeUsuario(null);
     setPage("login");
+    obterLembrarPersistidoAsync().then((lembrar) => {
+      if (!lembrar) definirTema("light");
+    });
     toast.info("Sessão encerrada", "Até logo!");
   };
 
   const currentPage: Page = page === "dashboard" && !emailUsuario ? "login" : page;
 
-  if (!fontsLoaded || !hidratado) {
-    return <View style={styles.boot} />;
+  if (!fontsLoaded || !hidratado || !pronto) {
+    return <BootScreen />;
   }
 
   return (
@@ -89,6 +107,5 @@ export default function App() {
 const styles = StyleSheet.create({
   boot: {
     flex: 1,
-    backgroundColor: colors.background,
   },
 });

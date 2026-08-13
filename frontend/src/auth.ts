@@ -3,6 +3,7 @@ const CHAVE_EMAIL = "radar.emailUsuario";
 const CHAVE_NOME = "radar.nomeUsuario";
 const CHAVE_SENHA = "radar.senha";
 const CHAVE_LEMBRAR = "radar.lembrar";
+const CHAVE_TEMA = "radar.theme";
 
 let memoriaToken: string | null = null;
 let memoriaEmail: string | null = null;
@@ -71,15 +72,23 @@ export function obterLembrar(): boolean {
   return memoriaLembrar;
 }
 
+export function obterLembrarPersistido(): boolean {
+  return localStorage.getItem(CHAVE_LEMBRAR) === "true";
+}
+
 export function salvarLembrar(persistir: boolean): void {
   memoriaLembrar = persistir;
   if (persistir) localStorage.setItem(CHAVE_LEMBRAR, "true");
-  else localStorage.removeItem(CHAVE_LEMBRAR);
+  else {
+    localStorage.removeItem(CHAVE_LEMBRAR);
+    localStorage.removeItem(CHAVE_TEMA);
+  }
 }
 
 export function limparLembrar(): void {
   memoriaLembrar = false;
   localStorage.removeItem(CHAVE_LEMBRAR);
+  localStorage.removeItem(CHAVE_TEMA);
 }
 
 export function restaurar(): boolean {

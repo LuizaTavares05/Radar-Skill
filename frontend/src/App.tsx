@@ -4,15 +4,18 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Toaster, { toast } from "./components/Toast";
+import { useTheme } from "./theme/ThemeContext";
 import {
   limparNomeUsuario,
   limparToken,
   obterEmailUsuario,
+  obterLembrarPersistido,
   obterNomeUsuario,
   restaurar,
 } from "./auth";
 
 export default function App() {
+  const { definirTema } = useTheme();
   const [page, setPage] = useState<Page>("login");
   const [emailUsuario, setEmailUsuario] = useState<string | null>(null);
   const [nomeUsuario, setNomeUsuario] = useState<string | null>(null);
@@ -37,6 +40,7 @@ export default function App() {
     setEmailUsuario(null);
     setNomeUsuario(null);
     setPage("login");
+    if (!obterLembrarPersistido()) definirTema("light");
     toast.info("Sessão encerrada", "Até logo!");
   };
 

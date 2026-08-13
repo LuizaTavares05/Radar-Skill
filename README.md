@@ -36,8 +36,7 @@ O `docker-compose.yml` orquestra os quatro serviços da aplicação: **banco Pos
 ### Pré-requisitos
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e em execução.
-- Aplicativo **Expo Go** instalado no seu celular (para testar a aplicação Mobile).
-- Firewall configurado, caso sua rede seja privada.
+- Aplicativo **Expo Go** instalado no seu celular e firewall configurado, caso sua rede seja privada (para testar a aplicação Mobile).
 
 ### Firewall (redes privadas — Windows)
 
@@ -80,7 +79,7 @@ netsh advfirewall firewall add rule name="Docker Backend Private" dir=in action=
 | frontend  | 8081          | http://localhost:8081                         |
 | mobile    | 8082          | docker compose logs -f mobile (Expo Metro)    |
 
-> **Portas configuráveis:** todos os serviços têm portas padrão que já funcionam, mas podem ser alteradas conforme a necessidade via variáveis de ambiente no `.env` da raiz: `DB_PORT` (banco, padrão `5432`), `BACKEND_PORT` (backend, padrão `8080`), `FRONTEND_PORT` (frontend, padrão `8081`) e MY_LOCAL_IP (para o redirecionamento mobile). Veja o [`.env.example`](.env.example) para a lista completa.
+> **Portas configuráveis:** todos os serviços têm portas padrão que já funcionam, mas podem ser alteradas conforme a necessidade via variáveis de ambiente no `.env` da raiz: `DB_PORT` (banco, padrão `5432`), `BACKEND_PORT` (backend, padrão `8080`), `FRONTEND_PORT` (frontend, padrão `8081`) e `MY_LOCAL_IP` (para o redirecionamento mobile). Veja o [`.env.example`](.env.example) para a lista completa.
 
 > **Nota:** Sugiro configurar a porta do banco de dados diferente da porta onde está localizado o PostgreSQL nativo do Windows, caso tenha.
 

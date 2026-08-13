@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Pressable,
@@ -9,7 +9,9 @@ import {
   type TextInputProps,
 } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 type InputProps = {
   label: string;
@@ -42,8 +44,10 @@ export default function Input({
   returnKeyType,
   onSubmitEditing,
 }: InputProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [focused, setFocused] = useState(false);
-  const inputRef = useRef<TextInput>(null); // 1. Referência adicionada ao TextInput
+  const inputRef = useRef<TextInput>(null);
   const active = focused || value.length > 0;
   const progress = useRef(new Animated.Value(active ? 1 : 0)).current;
 
@@ -61,7 +65,6 @@ export default function Input({
 
   return (
     <View>
-      {/* 2. Container transformado em Pressable para acionar o foco caso toque em qualquer lugar */}
       <Pressable
         onPress={() => inputRef.current?.focus()}
         style={[
@@ -75,9 +78,8 @@ export default function Input({
             <Icon size={18} color={focused ? colors.primary : colors.muted} />
           </View>
         )}
-        
+
         <View style={styles.inputWrap}>
-          {}
           <Animated.Text
             pointerEvents="none"
             style={[
@@ -123,64 +125,65 @@ export default function Input({
   );
 }
 
-const styles = StyleSheet.create({
-  field: {
-    flexDirection: "row",
-    alignItems: "center",
-    minHeight: 58,
-    borderRadius: radius.md,
-    borderWidth: 2,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-  },
-  fieldFocused: {
-    borderColor: colors.primary,
-    shadowColor: colors.primary,
-    shadowOpacity: 0.12,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 3,
-    elevation: 4,
-  },
-  fieldError: {
-    borderColor: colors.danger,
-  },
-  iconLeft: {
-    paddingLeft: 16,
-  },
-  inputWrap: {
-    flex: 1,
-    paddingHorizontal: 16,
-    justifyContent: "center",
-    minHeight: 58,
-  },
-  label: {
-    position: "absolute",
-    left: 16,
-    color: colors.muted,
-    fontFamily: font.regular,
-    zIndex: 1,
-  },
-  labelActive: {
-    fontFamily: font.semibold,
-  },
-  input: {
-    flex: 1,
-    height: "100%",
-    fontSize: 15,
-    fontFamily: font.regular,
-    color: colors.foreground,
-    paddingTop: 18,
-    paddingBottom: 6,
-  },
-  iconRight: {
-    paddingRight: 16,
-    paddingLeft: 4,
-  },
-  errorText: {
-    marginTop: 6,
-    marginLeft: 4,
-    fontSize: 12,
-    color: colors.danger,
-    fontFamily: font.medium,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    field: {
+      flexDirection: "row",
+      alignItems: "center",
+      minHeight: 58,
+      borderRadius: radius.md,
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.card,
+    },
+    fieldFocused: {
+      borderColor: c.primary,
+      shadowColor: c.primary,
+      shadowOpacity: 0.12,
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 3,
+      elevation: 4,
+    },
+    fieldError: {
+      borderColor: c.danger,
+    },
+    iconLeft: {
+      paddingLeft: 16,
+    },
+    inputWrap: {
+      flex: 1,
+      paddingHorizontal: 16,
+      justifyContent: "center",
+      minHeight: 58,
+    },
+    label: {
+      position: "absolute",
+      left: 16,
+      color: c.muted,
+      fontFamily: font.regular,
+      zIndex: 1,
+    },
+    labelActive: {
+      fontFamily: font.semibold,
+    },
+    input: {
+      flex: 1,
+      height: "100%",
+      fontSize: 15,
+      fontFamily: font.regular,
+      color: c.foreground,
+      paddingTop: 18,
+      paddingBottom: 6,
+    },
+    iconRight: {
+      paddingRight: 16,
+      paddingLeft: 4,
+    },
+    errorText: {
+      marginTop: 6,
+      marginLeft: 4,
+      fontSize: 12,
+      color: c.danger,
+      fontFamily: font.medium,
+    },
+  });

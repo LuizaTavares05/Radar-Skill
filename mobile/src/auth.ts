@@ -5,6 +5,7 @@ const CHAVE_EMAIL = "radar.emailUsuario";
 const CHAVE_NOME = "radar.nomeUsuario";
 const CHAVE_SENHA = "radar.senha";
 const CHAVE_LEMBRAR = "radar.lembrar";
+const CHAVE_TEMA = "radar.theme";
 
 let token: string | null = null;
 let emailUsuario: string | null = null;
@@ -88,15 +89,24 @@ export function obterLembrar(): boolean {
   return lembrarUsuario;
 }
 
+export async function obterLembrarPersistidoAsync(): Promise<boolean> {
+  const salvo = await AsyncStorage.getItem(CHAVE_LEMBRAR);
+  return salvo === "true";
+}
+
 export function salvarLembrar(persistir: boolean): void {
   lembrarUsuario = persistir;
   if (persistir) AsyncStorage.setItem(CHAVE_LEMBRAR, "true").catch(() => {});
-  else AsyncStorage.removeItem(CHAVE_LEMBRAR).catch(() => {});
+  else {
+    AsyncStorage.removeItem(CHAVE_LEMBRAR).catch(() => {});
+    AsyncStorage.removeItem(CHAVE_TEMA).catch(() => {});
+  }
 }
 
 export function limparLembrar(): void {
   lembrarUsuario = false;
   AsyncStorage.removeItem(CHAVE_LEMBRAR).catch(() => {});
+  AsyncStorage.removeItem(CHAVE_TEMA).catch(() => {});
 }
 
 export async function hidratar(): Promise<void> {

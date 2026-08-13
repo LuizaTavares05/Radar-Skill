@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { AlertTriangle } from "lucide-react-native";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 type ConfirmDialogProps = {
   open: boolean;
@@ -11,6 +13,8 @@ type ConfirmDialogProps = {
 };
 
 export default function ConfirmDialog({ open, onClose, onConfirm, skillName }: ConfirmDialogProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [deleting, setDeleting] = useState(false);
 
   const closeDialog = () => {
@@ -70,80 +74,81 @@ export default function ConfirmDialog({ open, onClose, onConfirm, skillName }: C
   );
 }
 
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(38, 50, 56, 0.4)",
-  },
-  card: {
-    width: "100%",
-    maxWidth: 384,
-    backgroundColor: colors.card,
-    borderRadius: radius.md,
-    padding: 28,
-  },
-  iconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: radius.md,
-    backgroundColor: "rgba(185, 74, 72, 0.1)",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  title: {
-    fontSize: 18,
-    fontFamily: font.bold,
-    color: colors.foreground,
-    marginBottom: 8,
-  },
-  message: {
-    fontSize: 14,
-    fontFamily: font.regular,
-    color: colors.textSecondary,
-    lineHeight: 21,
-    marginBottom: 24,
-  },
-  strong: {
-    fontFamily: font.semibold,
-    color: colors.foreground,
-  },
-  footer: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  button: {
-    flex: 1,
-    minHeight: 48,
-    borderRadius: radius.sm,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cancelButton: {
-    borderWidth: 2,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-  },
-  cancelText: {
-    fontSize: 15,
-    fontFamily: font.semibold,
-    color: colors.textSecondary,
-  },
-  deleteButton: {
-    backgroundColor: colors.danger,
-  },
-  deleteText: {
-    fontSize: 15,
-    fontFamily: font.semibold,
-    color: colors.white,
-  },
-  disabled: {
-    opacity: 0.6,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    overlay: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 16,
+    },
+    backdrop: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: "rgba(38, 50, 56, 0.4)",
+    },
+    card: {
+      width: "100%",
+      maxWidth: 384,
+      backgroundColor: c.card,
+      borderRadius: radius.md,
+      padding: 28,
+    },
+    iconBox: {
+      width: 48,
+      height: 48,
+      borderRadius: radius.md,
+      backgroundColor: c.dangerTint,
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 16,
+    },
+    title: {
+      fontSize: 18,
+      fontFamily: font.bold,
+      color: c.foreground,
+      marginBottom: 8,
+    },
+    message: {
+      fontSize: 14,
+      fontFamily: font.regular,
+      color: c.textSecondary,
+      lineHeight: 21,
+      marginBottom: 24,
+    },
+    strong: {
+      fontFamily: font.semibold,
+      color: c.foreground,
+    },
+    footer: {
+      flexDirection: "row",
+      gap: 12,
+    },
+    button: {
+      flex: 1,
+      minHeight: 48,
+      borderRadius: radius.sm,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    cancelButton: {
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.card,
+    },
+    cancelText: {
+      fontSize: 15,
+      fontFamily: font.semibold,
+      color: c.textSecondary,
+    },
+    deleteButton: {
+      backgroundColor: c.danger,
+    },
+    deleteText: {
+      fontSize: 15,
+      fontFamily: font.semibold,
+      color: c.white,
+    },
+    disabled: {
+      opacity: 0.6,
+    },
+  });

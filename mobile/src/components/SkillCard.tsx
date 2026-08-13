@@ -1,7 +1,10 @@
+import { useMemo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Pencil, Trash2 } from "lucide-react-native";
 import type { Skill } from "../types";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import SkillIcon from "./SkillIcon";
 import LevelBadge from "./LevelBadge";
 
@@ -13,6 +16,9 @@ type SkillCardProps = {
 };
 
 export default function SkillCard({ skill, onOpen, onEdit, onDelete }: SkillCardProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <Pressable
       onPress={() => onOpen(skill)}
@@ -57,6 +63,9 @@ export default function SkillCard({ skill, onOpen, onEdit, onDelete }: SkillCard
 }
 
 export function SkillCardSkeleton() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <View style={[styles.card, styles.skeletonCard]}>
       <View style={[styles.iconWrap, styles.skeletonBlock]} />
@@ -68,83 +77,84 @@ export function SkillCardSkeleton() {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    backgroundColor: colors.card,
-    borderWidth: 2,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    padding: 16,
-  },
-  pressed: {
-    borderColor: colors.primary,
-    opacity: 0.95,
-  },
-  iconWrap: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.md,
-    backgroundColor: "rgba(10, 78, 119, 0.06)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  info: {
-    flex: 1,
-    gap: 4,
-  },
-  nome: {
-    fontSize: 16,
-    fontFamily: font.semibold,
-    color: colors.foreground,
-  },
-  categoria: {
-    fontSize: 13,
-    fontFamily: font.regular,
-    color: colors.textSecondary,
-  },
-  actions: {
-    alignItems: "center",
-    gap: 10,
-  },
-  actionButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(185, 74, 72, 0.08)",
-  },
-  actionPressed: {
-    backgroundColor: "rgba(185, 74, 72, 0.18)",
-  },
-  actionButtonEdit: {
-    width: 30,
-    height: 30,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(10, 78, 119, 0.08)",
-  },
-  actionPressedEdit: {
-    backgroundColor: "rgba(10, 78, 119, 0.18)",
-  },
-  skeletonCard: {
-    opacity: 0.7,
-  },
-  skeletonBlock: {
-    backgroundColor: colors.border,
-    borderRadius: radius.sm,
-  },
-  skeletonLineWide: {
-    height: 14,
-    width: "65%",
-  },
-  skeletonLineNarrow: {
-    height: 12,
-    width: "40%",
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    card: {
+      width: "100%",
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      backgroundColor: c.card,
+      borderWidth: 2,
+      borderColor: c.border,
+      borderRadius: radius.lg,
+      padding: 16,
+    },
+    pressed: {
+      borderColor: c.primary,
+      opacity: 0.95,
+    },
+    iconWrap: {
+      width: 52,
+      height: 52,
+      borderRadius: radius.md,
+      backgroundColor: c.primaryTint,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    info: {
+      flex: 1,
+      gap: 4,
+    },
+    nome: {
+      fontSize: 16,
+      fontFamily: font.semibold,
+      color: c.foreground,
+    },
+    categoria: {
+      fontSize: 13,
+      fontFamily: font.regular,
+      color: c.textSecondary,
+    },
+    actions: {
+      alignItems: "center",
+      gap: 10,
+    },
+    actionButton: {
+      width: 30,
+      height: 30,
+      borderRadius: 8,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.dangerTint,
+    },
+    actionPressed: {
+      opacity: 0.7,
+    },
+    actionButtonEdit: {
+      width: 30,
+      height: 30,
+      borderRadius: 8,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.primaryTint,
+    },
+    actionPressedEdit: {
+      opacity: 0.7,
+    },
+    skeletonCard: {
+      opacity: 0.7,
+    },
+    skeletonBlock: {
+      backgroundColor: c.border,
+      borderRadius: radius.sm,
+    },
+    skeletonLineWide: {
+      height: 14,
+      width: "65%",
+    },
+    skeletonLineNarrow: {
+      height: 12,
+      width: "40%",
+    },
+  });

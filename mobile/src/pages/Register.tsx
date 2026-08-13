@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { CheckCircle2, Eye, EyeOff, ShieldCheck, User, XCircle } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import Logo from "../components/Logo";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -46,6 +48,8 @@ function parseFieldErrors(message: string): Record<string, string> {
 }
 
 export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
+  const { colors, isDark } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { width } = useWindowDimensions();
   const isWide = width >= 1024;
   const [nome, setNome] = useState("");
@@ -170,7 +174,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
                   key={i}
                   style={[
                     styles.strengthBar,
-                    { backgroundColor: i <= forca.score ? forca.color : "#DCDEDF" },
+                    { backgroundColor: i <= forca.score ? forca.color : colors.border },
                   ]}
                 />
               ))}
@@ -181,7 +185,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
                   {item.ok ? (
                     <CheckCircle2 size={12} color={colors.success} />
                   ) : (
-                    <XCircle size={12} color="rgba(122, 133, 137, 0.4)" />
+                    <XCircle size={12} color={colors.muted} />
                   )}
                   <Text
                     style={[
@@ -217,7 +221,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
 
   return (
     <SafeAreaView style={styles.screen} edges={["top", "bottom"]}>
-      <StatusBar style="dark" />
+      <StatusBar style={isDark ? "light" : "dark"} />
       {isWide ? (
         <View style={styles.split}>
           <BrandPanel
@@ -250,128 +254,129 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  split: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  formPanel: {
-    flex: 1,
-    maxWidth: 500,
-    backgroundColor: colors.background,
-  },
-  formPanelContent: {
-    flexGrow: 1,
-    justifyContent: "center",
-    paddingHorizontal: 32,
-    paddingVertical: 48,
-  },
-  mobileScreen: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  mobileContent: {
-    flexGrow: 1,
-    justifyContent: "center",
-    paddingHorizontal: 28,
-    paddingVertical: 40,
-  },
-  mobileLogo: {
-    marginBottom: 32,
-  },
-  formContainer: {
-    width: "100%",
-    maxWidth: 384,
-    alignSelf: "center",
-  },
-  formHeader: {
-    marginBottom: 32,
-  },
-  heading: {
-    fontSize: 28,
-    fontFamily: font.bold,
-    color: colors.foreground,
-    marginBottom: 4,
-  },
-  subheading: {
-    fontSize: 16,
-    fontFamily: font.regular,
-    color: colors.textSecondary,
-  },
-  formFields: {
-    gap: 16,
-  },
-  strengthCard: {
-    backgroundColor: colors.card,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 16,
-    gap: 12,
-  },
-  strengthHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  strengthTitle: {
-    fontSize: 12,
-    fontFamily: font.semibold,
-    color: colors.textSecondary,
-  },
-  strengthLabel: {
-    fontSize: 12,
-    fontFamily: font.bold,
-  },
-  strengthBars: {
-    flexDirection: "row",
-    gap: 4,
-  },
-  strengthBar: {
-    flex: 1,
-    height: 6,
-    borderRadius: radius.full,
-  },
-  checklist: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    rowGap: 6,
-    columnGap: 12,
-  },
-  checkItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    width: "47%",
-  },
-  checkText: {
-    fontSize: 12,
-    fontFamily: font.regular,
-  },
-  checkTextOk: {
-    color: colors.success,
-  },
-  checkTextMuted: {
-    color: colors.muted,
-  },
-  divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    paddingVertical: 4,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border,
-  },
-  dividerText: {
-    fontSize: 12,
-    fontFamily: font.medium,
-    color: colors.muted,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    split: {
+      flex: 1,
+      flexDirection: "row",
+    },
+    formPanel: {
+      flex: 1,
+      maxWidth: 500,
+      backgroundColor: c.background,
+    },
+    formPanelContent: {
+      flexGrow: 1,
+      justifyContent: "center",
+      paddingHorizontal: 32,
+      paddingVertical: 48,
+    },
+    mobileScreen: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    mobileContent: {
+      flexGrow: 1,
+      justifyContent: "center",
+      paddingHorizontal: 28,
+      paddingVertical: 40,
+    },
+    mobileLogo: {
+      marginBottom: 32,
+    },
+    formContainer: {
+      width: "100%",
+      maxWidth: 384,
+      alignSelf: "center",
+    },
+    formHeader: {
+      marginBottom: 32,
+    },
+    heading: {
+      fontSize: 28,
+      fontFamily: font.bold,
+      color: c.foreground,
+      marginBottom: 4,
+    },
+    subheading: {
+      fontSize: 16,
+      fontFamily: font.regular,
+      color: c.textSecondary,
+    },
+    formFields: {
+      gap: 16,
+    },
+    strengthCard: {
+      backgroundColor: c.card,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: c.border,
+      padding: 16,
+      gap: 12,
+    },
+    strengthHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    strengthTitle: {
+      fontSize: 12,
+      fontFamily: font.semibold,
+      color: c.textSecondary,
+    },
+    strengthLabel: {
+      fontSize: 12,
+      fontFamily: font.bold,
+    },
+    strengthBars: {
+      flexDirection: "row",
+      gap: 4,
+    },
+    strengthBar: {
+      flex: 1,
+      height: 6,
+      borderRadius: radius.full,
+    },
+    checklist: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      rowGap: 6,
+      columnGap: 12,
+    },
+    checkItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      width: "47%",
+    },
+    checkText: {
+      fontSize: 12,
+      fontFamily: font.regular,
+    },
+    checkTextOk: {
+      color: c.success,
+    },
+    checkTextMuted: {
+      color: c.muted,
+    },
+    divider: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      paddingVertical: 4,
+    },
+    dividerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: c.border,
+    },
+    dividerText: {
+      fontSize: 12,
+      fontFamily: font.medium,
+      color: c.muted,
+    },
+  });

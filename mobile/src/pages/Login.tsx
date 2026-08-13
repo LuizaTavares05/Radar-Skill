@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { Check, Eye, EyeOff, ShieldCheck, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import Logo from "../components/Logo";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -31,6 +33,8 @@ type LoginProps = {
 };
 
 function StatsCards() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   return (
     <View style={styles.stats}>
       {[
@@ -48,6 +52,8 @@ function StatsCards() {
 }
 
 export default function Login({ onLogin, onGoRegister }: LoginProps) {
+  const { colors, isDark, definirTema } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { width } = useWindowDimensions();
   const isWide = width >= 1024;
   const [email, setEmail] = useState("");
@@ -85,6 +91,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
       salvarNomeUsuario(nome, lembrar);
       salvarSenha(senha, lembrar);
       salvarLembrar(lembrar);
+      if (!lembrar) definirTema("light");
       onLogin(email.trim(), nome);
       toast.success("Bem-vindo de volta!", `Você entrou como ${email.trim()}.`);
     } catch (error) {
@@ -102,6 +109,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
         limparSenha();
         limparEmailUsuario();
         limparLembrar();
+        definirTema("light");
       }
       return proximo;
     });
@@ -158,7 +166,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
 
   return (
     <SafeAreaView style={styles.screen} edges={["top", "bottom"]}>
-      <StatusBar style="dark" />
+      <StatusBar style={isDark ? "light" : "dark"} />
       {isWide ? (
         <View style={styles.split}>
           <BrandPanel
@@ -202,6 +210,8 @@ function PressableCheckbox({
   checked: boolean;
   onToggle: () => void;
 }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   return (
     <View style={styles.checkboxRow}>
       <Pressable onPress={onToggle} style={[styles.checkbox, checked && styles.checkboxChecked]}>
@@ -212,136 +222,137 @@ function PressableCheckbox({
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  split: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  formPanel: {
-    flex: 1,
-    maxWidth: 500,
-    backgroundColor: colors.background,
-  },
-  formPanelContent: {
-    flexGrow: 1,
-    justifyContent: "center",
-    paddingHorizontal: 32,
-    paddingVertical: 48,
-  },
-  mobileScreen: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  mobileContent: {
-    flexGrow: 1,
-    justifyContent: "center",
-    paddingHorizontal: 28,
-    paddingVertical: 40,
-  },
-  mobileLogo: {
-    marginBottom: 32,
-  },
-  formContainer: {
-    width: "100%",
-    maxWidth: 384,
-    alignSelf: "center",
-  },
-  formHeader: {
-    marginBottom: 32,
-  },
-  heading: {
-    fontSize: 28,
-    fontFamily: font.bold,
-    color: colors.foreground,
-    marginBottom: 4,
-  },
-  subheading: {
-    fontSize: 16,
-    fontFamily: font.regular,
-    color: colors.textSecondary,
-  },
-  formFields: {
-    gap: 16,
-  },
-  rowBetween: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingTop: 4,
-  },
-  checkboxRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.card,
-  },
-  checkboxChecked: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primary,
-  },
-  checkboxLabel: {
-    fontSize: 14,
-    fontFamily: font.regular,
-    color: colors.textSecondary,
-  },
-  forgot: {
-    fontSize: 14,
-    fontFamily: font.medium,
-    color: colors.primary,
-    opacity: 0.7,
-  },
-  divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    paddingVertical: 4,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border,
-  },
-  dividerText: {
-    fontSize: 12,
-    fontFamily: font.medium,
-    color: colors.muted,
-  },
-  stats: {
-    flexDirection: "row",
-    gap: 16,
-    marginTop: 32,
-    flexWrap: "wrap",
-  },
-  statCard: {
-    backgroundColor: "rgba(255, 255, 255, 0.10)",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.20)",
-    borderRadius: radius.md,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-  },
-  statValue: {
-    fontSize: 18,
-    fontFamily: font.bold,
-    color: colors.white,
-  },
-  statLabel: {
-    marginTop: 2,
-    fontSize: 12,
-    fontFamily: font.medium,
-    color: colors.primaryLightest,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    split: {
+      flex: 1,
+      flexDirection: "row",
+    },
+    formPanel: {
+      flex: 1,
+      maxWidth: 500,
+      backgroundColor: c.background,
+    },
+    formPanelContent: {
+      flexGrow: 1,
+      justifyContent: "center",
+      paddingHorizontal: 32,
+      paddingVertical: 48,
+    },
+    mobileScreen: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    mobileContent: {
+      flexGrow: 1,
+      justifyContent: "center",
+      paddingHorizontal: 28,
+      paddingVertical: 40,
+    },
+    mobileLogo: {
+      marginBottom: 32,
+    },
+    formContainer: {
+      width: "100%",
+      maxWidth: 384,
+      alignSelf: "center",
+    },
+    formHeader: {
+      marginBottom: 32,
+    },
+    heading: {
+      fontSize: 28,
+      fontFamily: font.bold,
+      color: c.foreground,
+      marginBottom: 4,
+    },
+    subheading: {
+      fontSize: 16,
+      fontFamily: font.regular,
+      color: c.textSecondary,
+    },
+    formFields: {
+      gap: 16,
+    },
+    rowBetween: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingTop: 4,
+    },
+    checkboxRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+    },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderRadius: 6,
+      borderWidth: 2,
+      borderColor: c.border,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: c.card,
+    },
+    checkboxChecked: {
+      borderColor: c.primary,
+      backgroundColor: c.primary,
+    },
+    checkboxLabel: {
+      fontSize: 14,
+      fontFamily: font.regular,
+      color: c.textSecondary,
+    },
+    forgot: {
+      fontSize: 14,
+      fontFamily: font.medium,
+      color: c.primary,
+      opacity: 0.7,
+    },
+    divider: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      paddingVertical: 4,
+    },
+    dividerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: c.border,
+    },
+    dividerText: {
+      fontSize: 12,
+      fontFamily: font.medium,
+      color: c.muted,
+    },
+    stats: {
+      flexDirection: "row",
+      gap: 16,
+      marginTop: 32,
+      flexWrap: "wrap",
+    },
+    statCard: {
+      backgroundColor: "rgba(255, 255, 255, 0.10)",
+      borderWidth: 1,
+      borderColor: "rgba(255, 255, 255, 0.20)",
+      borderRadius: radius.md,
+      paddingHorizontal: 20,
+      paddingVertical: 12,
+    },
+    statValue: {
+      fontSize: 18,
+      fontFamily: font.bold,
+      color: c.white,
+    },
+    statLabel: {
+      marginTop: 2,
+      fontSize: 12,
+      fontFamily: font.medium,
+      color: c.primaryLightest,
+    },
+  });
