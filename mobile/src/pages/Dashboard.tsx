@@ -7,7 +7,9 @@ import { NIVEIS } from "../types";
 import { adicionarSkill, atualizarSkill, excluirSkill, obterMinhasSkills } from "../api/skills";
 import { ApiError } from "../api/client";
 import { obterToken } from "../auth";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import SkillCard, { SkillCardSkeleton } from "../components/SkillCard";
@@ -24,6 +26,8 @@ type DashboardProps = {
 };
 
 export default function Dashboard({ email, nome, onLogout }: DashboardProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { width } = useWindowDimensions();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [carregando, setCarregando] = useState(true);
@@ -319,142 +323,143 @@ export default function Dashboard({ email, nome, onLogout }: DashboardProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    maxWidth: 1280,
-    width: "100%",
-    alignSelf: "center",
-    paddingHorizontal: 24,
-    paddingTop: 32,
-    paddingBottom: 48,
-  },
-  titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 16,
-    marginBottom: 32,
-  },
-  titleBlock: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 28,
-    fontFamily: font.bold,
-    color: colors.foreground,
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: font.regular,
-    color: colors.textSecondary,
-  },
-  addButton: {
-    borderRadius: radius.md,
-    overflow: "hidden",
-  },
-  addButtonPressed: {
-    transform: [{ scale: 0.98 }],
-    opacity: 0.95,
-  },
-  addButtonFill: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingHorizontal: 18,
-    paddingVertical: 13,
-  },
-  addButtonText: {
-    fontSize: 15,
-    fontFamily: font.semibold,
-    color: colors.white,
-  },
-  statsRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginHorizontal: -8,
-    marginBottom: 24,
-  },
-  statCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    backgroundColor: colors.card,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 16,
-  },
-  statIconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.md,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  statInfo: {
-    flex: 1,
-  },
-  statValue: {
-    fontSize: 24,
-    fontFamily: font.bold,
-    color: colors.foreground,
-    lineHeight: 28,
-  },
-  statLabel: {
-    marginTop: 2,
-    fontSize: 12,
-    fontFamily: font.medium,
-    color: colors.muted,
-  },
-  searchWrap: {
-    marginBottom: 20,
-  },
-  resultRow: {
-    marginBottom: 8,
-    marginLeft: 10,
-  },
-  resultText: {
-    fontSize: 13,
-    fontFamily: font.medium,
-    color: colors.textSecondary,
-  },
-  resultMuted: {
-    color: colors.muted,
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginHorizontal: -10,
-  },
-  errorBox: {
-    alignItems: "center",
-    paddingVertical: 64,
-    gap: 16,
-  },
-  errorTitle: {
-    fontSize: 16,
-    fontFamily: font.medium,
-    color: colors.textSecondary,
-  },
-  retryButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: radius.sm,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    backgroundColor: colors.card,
-  },
-  retryButtonPressed: {
-    backgroundColor: "rgba(10, 78, 119, 0.06)",
-  },
-  retryText: {
-    fontSize: 14,
-    fontFamily: font.semibold,
-    color: colors.primary,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    content: {
+      maxWidth: 1280,
+      width: "100%",
+      alignSelf: "center",
+      paddingHorizontal: 24,
+      paddingTop: 32,
+      paddingBottom: 48,
+    },
+    titleRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 16,
+      marginBottom: 32,
+    },
+    titleBlock: {
+      flex: 1,
+    },
+    title: {
+      fontSize: 28,
+      fontFamily: font.bold,
+      color: c.foreground,
+      marginBottom: 4,
+    },
+    subtitle: {
+      fontSize: 16,
+      fontFamily: font.regular,
+      color: c.textSecondary,
+    },
+    addButton: {
+      borderRadius: radius.md,
+      overflow: "hidden",
+    },
+    addButtonPressed: {
+      transform: [{ scale: 0.98 }],
+      opacity: 0.95,
+    },
+    addButtonFill: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      paddingHorizontal: 18,
+      paddingVertical: 13,
+    },
+    addButtonText: {
+      fontSize: 15,
+      fontFamily: font.semibold,
+      color: c.white,
+    },
+    statsRow: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      marginHorizontal: -8,
+      marginBottom: 24,
+    },
+    statCard: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 14,
+      backgroundColor: c.card,
+      borderRadius: radius.lg,
+      borderWidth: 1,
+      borderColor: c.border,
+      padding: 16,
+    },
+    statIconBox: {
+      width: 44,
+      height: 44,
+      borderRadius: radius.md,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    statInfo: {
+      flex: 1,
+    },
+    statValue: {
+      fontSize: 24,
+      fontFamily: font.bold,
+      color: c.foreground,
+      lineHeight: 28,
+    },
+    statLabel: {
+      marginTop: 2,
+      fontSize: 12,
+      fontFamily: font.medium,
+      color: c.muted,
+    },
+    searchWrap: {
+      marginBottom: 20,
+    },
+    resultRow: {
+      marginBottom: 8,
+      marginLeft: 10,
+    },
+    resultText: {
+      fontSize: 13,
+      fontFamily: font.medium,
+      color: c.textSecondary,
+    },
+    resultMuted: {
+      color: c.muted,
+    },
+    grid: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      marginHorizontal: -10,
+    },
+    errorBox: {
+      alignItems: "center",
+      paddingVertical: 64,
+      gap: 16,
+    },
+    errorTitle: {
+      fontSize: 16,
+      fontFamily: font.medium,
+      color: c.textSecondary,
+    },
+    retryButton: {
+      paddingHorizontal: 24,
+      paddingVertical: 12,
+      borderRadius: radius.sm,
+      borderWidth: 2,
+      borderColor: c.primary,
+      backgroundColor: c.card,
+    },
+    retryButtonPressed: {
+      backgroundColor: c.primaryTint,
+    },
+    retryText: {
+      fontSize: 14,
+      fontFamily: font.semibold,
+      color: c.primary,
+    },
+  });

@@ -9,7 +9,7 @@ import {
   limparLembrar,
   limparSenha,
   obterEmailUsuario,
-  obterLembrar,
+  obterLembrarPersistido,
   obterSenha,
   salvarEmailUsuario,
   salvarLembrar,
@@ -18,6 +18,7 @@ import {
   salvarToken,
 } from "../auth";
 import { ApiError } from "../api/client";
+import { useTheme } from "../theme/ThemeContext";
 
 type LoginProps = {
   onLogin: (email: string, nome: string) => void;
@@ -25,6 +26,7 @@ type LoginProps = {
 };
 
 export default function Login({ onLogin, onGoRegister }: LoginProps) {
+  const { definirTema } = useTheme();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -33,7 +35,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (obterLembrar()) {
+    if (obterLembrarPersistido()) {
       setEmail(obterEmailUsuario() ?? "");
       setSenha(obterSenha() ?? "");
       setLembrar(true);
@@ -60,6 +62,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
       salvarNomeUsuario(nome, lembrar);
       salvarSenha(senha, lembrar);
       salvarLembrar(lembrar);
+      if (!lembrar) definirTema("light");
       onLogin(email.trim(), nome);
       toast.success("Bem-vindo de volta!", `Você entrou como ${email.trim()}.`);
     } catch (error) {
@@ -77,6 +80,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
         limparSenha();
         limparEmailUsuario();
         limparLembrar();
+        definirTema("light");
       }
       return proximo;
     });

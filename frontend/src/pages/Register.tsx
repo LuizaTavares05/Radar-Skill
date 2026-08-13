@@ -194,7 +194,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
                         key={i}
                         className="flex-1 h-1.5 rounded-full transition-all duration-300"
                         style={{
-                          backgroundColor: i <= forca.score ? forca.color : "#DCDEDF",
+                          backgroundColor: i <= forca.score ? forca.color : "var(--color-border)",
                         }}
                       />
                     ))}

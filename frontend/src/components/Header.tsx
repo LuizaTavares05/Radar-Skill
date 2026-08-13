@@ -1,5 +1,6 @@
 import { LogOut } from "lucide-react";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 type HeaderProps = {
   nome: string;
@@ -34,6 +35,7 @@ export default function Header({ nome, email, onLogout }: HeaderProps) {
               <p className="text-xs text-muted mt-0.5 leading-none">{email}</p>
             </div>
           </div>
+          <ThemeToggle />
           <button
             onClick={onLogout}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-muted hover:text-foreground hover:bg-surface transition-all duration-200 text-sm font-medium"

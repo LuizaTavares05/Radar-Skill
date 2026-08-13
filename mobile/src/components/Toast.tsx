@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 import { CheckCircle2, Info, X, XCircle } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 type TipoToast = "success" | "error" | "info";
 
@@ -43,15 +45,20 @@ export const toast = {
   info: (titulo: string, descricao?: string) => adicionar("info", titulo, descricao),
 };
 
-const ICONS: Record<TipoToast, { icon: typeof CheckCircle2; color: string; accent: string }> = {
-  success: { icon: CheckCircle2, color: colors.success, accent: colors.success },
-  error: { icon: XCircle, color: colors.danger, accent: colors.danger },
-  info: { icon: Info, color: colors.primary, accent: colors.primary },
-};
+function icones(c: Paleta): Record<TipoToast, { icon: typeof CheckCircle2; color: string; accent: string }> {
+  return {
+    success: { icon: CheckCircle2, color: c.success, accent: c.success },
+    error: { icon: XCircle, color: c.danger, accent: c.danger },
+    info: { icon: Info, color: c.primary, accent: c.primary },
+  };
+}
 
 export default function Toaster() {
+  const { colors } = useTheme();
+  const styles = useMemoStyles(colors);
   const [items, setItems] = useState<ItemToast[]>([]);
   const insets = useSafeAreaInsets();
+  const configs = icones(colors);
 
   useEffect(() => {
     listeners.push(setItems);
@@ -66,7 +73,7 @@ export default function Toaster() {
       style={[styles.container, { top: insets.top + 8, right: 12 }]}
     >
       {items.map((item) => {
-        const config = ICONS[item.type];
+        const config = configs[item.type];
         const Icon = config.icon;
         return <ToastCard key={item.id} item={item} config={config} Icon={Icon} />;
       })}
@@ -83,6 +90,8 @@ function ToastCard({
   config: { color: string; accent: string };
   Icon: typeof CheckCircle2;
 }) {
+  const { colors } = useTheme();
+  const styles = useMemoStyles(colors);
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -120,55 +129,60 @@ function ToastCard({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    zIndex: 100,
-    width: "88%",
-    maxWidth: 384,
-  },
-  card: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    backgroundColor: colors.card,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderLeftWidth: 4,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: 12,
-    shadowColor: colors.foreground,
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 12,
-    elevation: 6,
-  },
-  cardCompact: {
-    alignItems: "center",
-  },
-  icon: {
-    marginTop: 2,
-    marginRight: 12,
-  },
-  body: {
-    flex: 1,
-  },
-  titulo: {
-    fontSize: 14,
-    fontFamily: font.semibold,
-    color: colors.foreground,
-    lineHeight: 19,
-  },
-  descricao: {
-    marginTop: 2,
-    fontSize: 12,
-    fontFamily: font.regular,
-    color: colors.muted,
-    lineHeight: 17,
-  },
-  close: {
-    marginLeft: 8,
-    padding: 2,
-  },
-});
+function useMemoStyles(c: Paleta) {
+  return useMemo(() => createStyles(c), [c]);
+}
+
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    container: {
+      position: "absolute",
+      zIndex: 100,
+      width: "88%",
+      maxWidth: 384,
+    },
+    card: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      backgroundColor: c.card,
+      borderRadius: radius.sm,
+      borderWidth: 1,
+      borderColor: c.border,
+      borderLeftWidth: 4,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      marginBottom: 12,
+      shadowColor: c.foreground,
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 4 },
+      shadowRadius: 12,
+      elevation: 6,
+    },
+    cardCompact: {
+      alignItems: "center",
+    },
+    icon: {
+      marginTop: 2,
+      marginRight: 12,
+    },
+    body: {
+      flex: 1,
+    },
+    titulo: {
+      fontSize: 14,
+      fontFamily: font.semibold,
+      color: c.foreground,
+      lineHeight: 19,
+    },
+    descricao: {
+      marginTop: 2,
+      fontSize: 12,
+      fontFamily: font.regular,
+      color: c.muted,
+      lineHeight: 17,
+    },
+    close: {
+      marginLeft: 8,
+      padding: 2,
+    },
+  });

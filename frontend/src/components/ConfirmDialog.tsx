@@ -36,7 +36,7 @@ export default function ConfirmDialog({ open, onClose, onConfirm, skillName }: C
       role="alertdialog"
       aria-modal="true"
     >
-      <div className="absolute inset-0 bg-foreground/40 backdrop-blur-sm" onClick={closeDialog} />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeDialog} />
       <div className="relative bg-card rounded-2xl shadow-2xl w-full max-w-sm z-10 p-7 animate-[fadeInScale_0.18s_ease-out]">
         <div className="w-12 h-12 rounded-2xl bg-danger/10 flex items-center justify-center mb-4">
           <AlertTriangle size={22} className="text-danger" />

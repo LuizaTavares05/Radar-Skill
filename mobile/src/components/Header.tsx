@@ -1,8 +1,12 @@
+import { useMemo } from "react";
 import { LogOut } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 type HeaderProps = {
   nome: string;
@@ -22,6 +26,8 @@ function primeiroNome(nome: string, email: string): string {
 }
 
 export default function Header({ nome, email, onLogout }: HeaderProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const showUserInfo = width >= 500;
@@ -48,6 +54,7 @@ export default function Header({ nome, email, onLogout }: HeaderProps) {
               </View>
             )}
           </View>
+          <ThemeToggle />
           <Pressable
             onPress={onLogout}
             style={({ pressed }) => [styles.logout, pressed && styles.logoutPressed]}
@@ -62,76 +69,77 @@ export default function Header({ nome, email, onLogout }: HeaderProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: colors.card,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    paddingBottom: 12,
-  },
-  inner: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 24,
-  },
-  right: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-  userChip: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: radius.sm,
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  avatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  avatarText: {
-    color: colors.white,
-    fontSize: 12,
-    fontFamily: font.bold,
-  },
-  userInfo: {
-    maxWidth: 160,
-  },
-  nome: {
-    fontSize: 12,
-    fontFamily: font.semibold,
-    color: colors.foreground,
-  },
-  email: {
-    marginTop: 2,
-    fontSize: 11,
-    fontFamily: font.regular,
-    color: colors.muted,
-  },
-  logout: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: radius.sm,
-  },
-  logoutPressed: {
-    backgroundColor: colors.surface,
-  },
-  logoutText: {
-    fontSize: 14,
-    fontFamily: font.medium,
-    color: colors.muted,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    header: {
+      backgroundColor: c.card,
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+      paddingBottom: 12,
+    },
+    inner: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 24,
+    },
+    right: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+    },
+    userChip: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: radius.sm,
+      backgroundColor: c.background,
+      borderWidth: 1,
+      borderColor: c.border,
+    },
+    avatar: {
+      width: 28,
+      height: 28,
+      borderRadius: 8,
+      backgroundColor: c.primary,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    avatarText: {
+      color: c.white,
+      fontSize: 12,
+      fontFamily: font.bold,
+    },
+    userInfo: {
+      maxWidth: 160,
+    },
+    nome: {
+      fontSize: 12,
+      fontFamily: font.semibold,
+      color: c.foreground,
+    },
+    email: {
+      marginTop: 2,
+      fontSize: 11,
+      fontFamily: font.regular,
+      color: c.muted,
+    },
+    logout: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: radius.sm,
+    },
+    logoutPressed: {
+      backgroundColor: c.surface,
+    },
+    logoutText: {
+      fontSize: 14,
+      fontFamily: font.medium,
+      color: c.muted,
+    },
+  });

@@ -35,7 +35,7 @@ export default function SkillDetailModal({ skill, onClose, onEdit, onDelete }: S
       aria-modal="true"
       aria-label={`Detalhes de ${skill.nome}`}
     >
-      <div className="absolute inset-0 bg-foreground/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-card rounded-2xl shadow-2xl w-full max-w-lg z-10 overflow-hidden animate-[fadeInScale_0.18s_ease-out]">
         <div className="flex items-center justify-between px-6 pt-6 pb-5 border-b border-border">
           <div className="flex items-center gap-4 min-w-0">

@@ -1,6 +1,9 @@
+import { useMemo } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
-import { colors, font, radius } from "../theme";
+import { font, radius } from "../theme";
+import type { Paleta } from "../theme";
+import { useTheme } from "../context/ThemeContext";
 
 type ButtonProps = {
   title: string;
@@ -17,6 +20,8 @@ export default function Button({
   loading = false,
   disabled = false,
 }: ButtonProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const isDisabled = disabled || loading;
   const isPrimary = variant === "primary";
 
@@ -58,44 +63,45 @@ export default function Button({
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    borderRadius: radius.md,
-    overflow: "hidden",
-    minHeight: 54,
-  },
-  fill: {
-    flex: 1,
-  },
-  outlineBorder: {
-    borderWidth: 2,
-    borderColor: "rgba(10, 78, 119, 0.25)",
-    backgroundColor: colors.card,
-  },
-  content: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-  },
-  title: {
-    fontSize: 16,
-    fontFamily: font.semibold,
-  },
-  titlePrimary: {
-    color: colors.white,
-  },
-  titleOutline: {
-    color: colors.primary,
-  },
-  pressed: {
-    opacity: 0.92,
-    transform: [{ scale: 0.985 }],
-  },
-  disabled: {
-    opacity: 0.6,
-  },
-});
+const createStyles = (c: Paleta) =>
+  StyleSheet.create({
+    base: {
+      borderRadius: radius.md,
+      overflow: "hidden",
+      minHeight: 54,
+    },
+    fill: {
+      flex: 1,
+    },
+    outlineBorder: {
+      borderWidth: 2,
+      borderColor: "rgba(10, 78, 119, 0.25)",
+      backgroundColor: c.card,
+    },
+    content: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+    },
+    title: {
+      fontSize: 16,
+      fontFamily: font.semibold,
+    },
+    titlePrimary: {
+      color: c.white,
+    },
+    titleOutline: {
+      color: c.primary,
+    },
+    pressed: {
+      opacity: 0.92,
+      transform: [{ scale: 0.985 }],
+    },
+    disabled: {
+      opacity: 0.6,
+    },
+  });
