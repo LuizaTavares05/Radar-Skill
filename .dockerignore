@@ -16,5 +16,6 @@ HELP.md
 .git
 .gitignore
 *.log
-.env
+**/.env
+!.env
 .DS_Store

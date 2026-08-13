@@ -32,7 +32,7 @@ As configurações são definidas em `src/main/resources/application.properties`
 | `SERVER_PORT`     | `8080`                            | Porta HTTP da API (execução manual via Maven) |
 | `JWT_SECRET`      | `talentario-dev-secret-...-32bytes` | Chave secreta do JWT (mínimo 32 caracteres) |
 | `JWT_EXPIRATION`  | `86400000`                        | Tempo de expiração do token (milissegundos) |
-| `APP_CORS_ORIGINS`| `http://localhost:5173,http://localhost:3000` | Origens permitidas no CORS     |
+| `APP_CORS_ORIGINS`| `http://localhost:5173` | Origens permitidas no CORS     |
 
 > **Portas configuráveis:** todos os valores acima têm **padrões que já funcionam**, mas podem ser alterados via `.env` conforme a necessidade (ex.: porta ocupada). Ao rodar via Docker Compose, a porta do host do backend é controlada por `BACKEND_PORT` no `.env` da raiz.
 >
