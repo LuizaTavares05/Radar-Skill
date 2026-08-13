@@ -31,7 +31,7 @@ Plataforma de gerenciamento de skills técnicas de desenvolvedores. O usuário r
 
 O `docker-compose.yml` orquestra três serviços: **banco PostgreSQL**, **backend** e **frontend web**.
 
-**OBS: Os três serviços podem ser executados indivudualmente de forma manual, cada um possui um README individual com o passo a passo.**
+> **Nota:** Os três serviços podem ser executados individualmente de forma manual. Cada um possui um `README.md` próprio com o passo a passo dedicado em sua respectiva pasta.
 
 ### Pré-requisitos
 
@@ -67,6 +67,8 @@ O `docker-compose.yml` orquestra três serviços: **banco PostgreSQL**, **backen
 
 > **Portas configuráveis:** todos os serviços têm portas padrão que já funcionam, mas podem ser alteradas conforme a necessidade via variáveis de ambiente no `.env` da raiz: `DB_PORT` (banco, padrão `5432`), `BACKEND_PORT` (backend, padrão `8080`) e `FRONTEND_PORT` (frontend, padrão `8081`). Veja o [`.env.example`](.env.example) para a lista completa.
 
+> **Nota:** Sugiro configurar a porta do banco de dados diferente da porta onde está localizado o PostgreSQL nativo do Windows, caso tenha.
+
 Na primeira inicialização, o contêiner do PostgreSQL executa automaticamente o script **`backend/database/SistemaSkill.sql`**, responsável pela criação das tabelas e pela carga inicial do catálogo de skills (15 skills). O script é montado em `/docker-entrypoint-initdb.d/` e roda apenas na primeira criação do volume de dados.
 
 O frontend servido na porta `8081` utiliza um Nginx que encaminha as requisições `/api/*` para o serviço `backend` na porta `8080`.
@@ -99,3 +101,13 @@ npx expo start
 ```
 
 Escaneie o QR Code exibido no terminal com o aplicativo **Expo Go**. É necessário ajustar a URL da API para o IP local da máquina (ver [mobile/README.md](mobile/README.md)).
+
+---
+
+<div align="center">
+
+Desenvolvido por **Luiza Tavares**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lutavares05/)
+
+</div>
