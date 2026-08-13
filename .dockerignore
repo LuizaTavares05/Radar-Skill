@@ -1,15 +1,20 @@
-node_modules
-dist
-.git
+# Node & Frontend / Mobile
+**/node_modules
+**/dist
+**/.expo
 *.tsbuildinfo
 npm-debug.log
-.expo
 
-# backend
-target/
+# Backend / Java
+**/target
 .mvn/
 mvnw
 mvnw.cmd
 HELP.md
+
+# Arquivos de Sistema, Git & Logs
+.git
+.gitignore
 *.log
 .env
+.DS_Store

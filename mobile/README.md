@@ -15,7 +15,7 @@ Aplicativo mobile de gerenciamento de skills, construído com React Native e Exp
 
 - **Node.js** 18 ou superior;
 - Aplicativo **Expo Go** instalado no dispositivo físico, ou **emulador Android/iOS** configurado;
-- Backend em execução (via Docker Compose ou manual) na mesma rede do dispositivo.
+- Backend em execução na mesma rede do dispositivo.
 
 ## Conexão com a API (Importante)
 
@@ -56,10 +56,6 @@ Em um **dispositivo físico**, usar `http://localhost:8080` **não funciona**: o
    ```
 
 3. Garanta que o celular e a máquina estejam na **mesma rede Wi-Fi** e que a porta `8080` esteja liberada no firewall.
-
-> **Funciona nos dois modos:** o app conecta ao backend tanto em execução **manual** (`mvn`, porta `SERVER_PORT` do `backend/.env`) quanto via **Docker** (porta `BACKEND_PORT` do `.env` da raiz) — ambos com default `8080`. Se alguma dessas portas for alterada, basta ajustar `EXPO_PUBLIC_API_URL` no `.env` do mobile para a porta real do backend em execução.
-
-Após alterar a variável, reinicie o servidor de desenvolvimento do Expo.
 
 ## Execução
 
