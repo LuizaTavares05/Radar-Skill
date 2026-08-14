@@ -27,6 +27,34 @@ Plataforma de gerenciamento de skills técnicas de desenvolvedores. O usuário r
 └── .env.example        # Modelo das variáveis de ambiente do Docker Compose
 ```
 
+## Funcionalidades
+
+### Autenticação
+
+- Cadastro de usuário
+- Login com autenticação JWT
+- Senha armazenada de forma criptografada
+- Opção de gravar senha para preenchimento automático no próximo acesso
+- Logout
+
+### Gerenciamento de Skills
+
+- Consulta ao catálogo de skills
+- Associação de skills à conta do usuário
+- Definição de nível de proficiência
+- Adição de descrição personalizada
+- Edição de skills associadas
+- Exclusão de skills
+- Pesquisa por nome
+- Filtro por categoria
+- Visualização das skills cadastradas
+
+### Plataformas
+
+- Aplicação Web responsiva
+- Aplicativo Mobile
+- Web e Mobile consumindo a mesma API REST
+
 ## Execução via Docker Compose
 
 O `docker-compose.yml` orquestra os quatro serviços da aplicação: **banco PostgreSQL**, **backend**, **frontend web** e **mobile**.
@@ -85,26 +113,6 @@ As portas utilizadas pela aplicação podem ser configuradas no arquivo `.env` l
 Consulte o [`.env.example`](.env.example) para visualizar todas as variáveis disponíveis.
 
 > **Importante:** se o PostgreSQL já estiver instalado e executando diretamente no Windows, utilize uma porta diferente para o banco do Docker, caso haja conflito com a porta `5432`.
-
-### Banco de dados
-
-Na primeira inicialização, o PostgreSQL executa automaticamente o script [`SistemaSkill.sql`](backend/database/SistemaSkill.sql).
-
-O script:
-
-- cria as tabelas do sistema;
-- configura os relacionamentos;
-- insere o catálogo inicial com 15 skills.
-
-O arquivo é montado no diretório `/docker-entrypoint-initdb.d/` do container e é executado somente quando o volume do PostgreSQL é criado pela primeira vez.
-
-### Frontend Web
-
-O frontend Web é servido pelo Nginx na porta `8081`.
-
-As requisições destinadas a `/api/*` são encaminhadas automaticamente pelo Nginx para o backend Spring Boot, executando na porta `8080`.
-
-Dessa forma, o frontend utiliza a API através do mesmo domínio/host, sem precisar expor diretamente a porta do backend ao navegador.
 
 ---
 
