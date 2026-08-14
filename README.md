@@ -63,6 +63,7 @@ netsh advfirewall firewall add rule name="Docker Backend Private" dir=in action=
    ```bash
    docker compose up -d
    ```
+   > Na primeira execução, o Docker realizará o download das imagens e construção dos serviços. Execuções posteriores utilizarão o cache das imagens e camadas já construídas.
 
 3. Verifique os serviços:
 
