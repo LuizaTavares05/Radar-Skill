@@ -13,6 +13,7 @@ type BrandPanelProps = {
   subtitle: string;
   children?: ReactNode;
   compact?: boolean;
+  hideLogo?: boolean;
 };
 
 function DotsPattern() {
@@ -27,7 +28,13 @@ function DotsPattern() {
   );
 }
 
-export default function BrandPanel({ title, subtitle, children, compact = false }: BrandPanelProps) {
+export default function BrandPanel({
+  title,
+  subtitle,
+  children,
+  compact = false,
+  hideLogo = false,
+}: BrandPanelProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
@@ -42,8 +49,8 @@ export default function BrandPanel({ title, subtitle, children, compact = false 
         <DotsPattern />
       </View>
       <View style={[styles.content, compact && styles.contentCompact]}>
-        <Logo light />
-        <View style={compact ? styles.compactSpacer : styles.spacer} />
+        {!hideLogo && <Logo light />}
+        {!hideLogo && <View style={compact ? styles.compactSpacer : styles.spacer} />}
         <View>
           <Text style={[styles.title, compact && styles.titleCompact]}>{title}</Text>
           <Text style={[styles.subtitle, compact && styles.subtitleCompact]}>{subtitle}</Text>

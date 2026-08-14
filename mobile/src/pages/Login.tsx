@@ -9,6 +9,7 @@ import { useTheme } from "../context/ThemeContext";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import BrandPanel from "../components/BrandPanel";
+import Logo from "../components/Logo";
 import { toast } from "../components/Toast";
 import { entrar } from "../api/auth";
 import { ApiError } from "../api/client";
@@ -190,9 +191,14 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
           contentContainerStyle={styles.mobileContent}
           keyboardShouldPersistTaps="handled"
         >
+          <View style={styles.mobileLogo}>
+            <Logo />
+          </View>
+          {form}
           <View style={styles.mobileBrand}>
             <BrandPanel
               compact
+              hideLogo
               title={"Gerencie sua stack de tecnologia\ncom precisão."}
               subtitle={
                 "Acompanhe skills, versões e níveis de proficiência. Fique à frente da sua evolução como desenvolvedor."
@@ -201,7 +207,6 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
               <StatsCards />
             </BrandPanel>
           </View>
-          {form}
         </ScrollView>
       )}
     </SafeAreaView>
@@ -261,6 +266,12 @@ const createStyles = (c: Paleta) =>
       paddingVertical: 40,
     },
     mobileBrand: {
+      width: "100%",
+      maxWidth: 384,
+      alignSelf: "center",
+      marginTop: 28,
+    },
+    mobileLogo: {
       width: "100%",
       maxWidth: 384,
       alignSelf: "center",
