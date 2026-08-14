@@ -15,7 +15,7 @@ API REST responsável por autenticação (JWT) e gerenciamento de skills técnic
 ## Pré-requisitos
 
 - **JDK 21** instalado e configurado no `PATH`;
-- **PostgreSQL** em execução, com o script `database/SistemaSkill.sql` aplicado (criação do banco, das tabelas e dados iniciais);
+- **PostgreSQL** em execução, banco criado com o nome `radar_skill` com o script `database/SistemaSkill.sql` aplicado (criação as tabelas e dados iniciais);
 - Maven (o projeto inclui o wrapper `mvnw`, dispensando instalação global).
 
 ## Configuração de Ambiente
