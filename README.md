@@ -12,7 +12,7 @@ Plataforma de gerenciamento de skills técnicas de desenvolvedores. O usuário r
 | Frontend (Web)    | React 18 · TypeScript · Vite · Tailwind CSS 4 · Fetch API   |
 | Mobile            | React Native 0.81 · Expo 54 · TypeScript · AsyncStorage |
 | Banco de dados    | PostgreSQL 16                                                               |
-| Infraestrutura    | Docker Compose · Nginx · Maven Wrapper                                      |
+| Infraestrutura    | Docker Compose · Nginx                                    |
 
 ## Estrutura do Repositório
 
