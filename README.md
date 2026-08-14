@@ -73,6 +73,8 @@ netsh advfirewall firewall add rule name="Docker Backend Private" dir=in action=
 
 ### Serviços e portas
 
+As portas utilizadas pela aplicação podem ser configuradas no arquivo `.env` localizado na raiz do projeto.
+
 | Serviço   | Porta no host | Acesso                                        |
 | --------- | ------------- | --------------------------------------------- |
 | db        | 5432          | PostgreSQL (interno da rede Docker)           |
@@ -80,13 +82,29 @@ netsh advfirewall firewall add rule name="Docker Backend Private" dir=in action=
 | frontend  | 8081          | http://localhost:8081                         |
 | mobile    | 8082          | docker compose logs -f mobile (Expo Metro)    |
 
-> **Portas configuráveis:** todos os serviços têm portas padrão que já funcionam, mas podem ser alteradas conforme a necessidade via variáveis de ambiente no `.env` da raiz: `DB_PORT` (banco, padrão `5432`), `BACKEND_PORT` (backend, padrão `8080`), `FRONTEND_PORT` (frontend, padrão `8081`) e `MY_LOCAL_IP` (para o redirecionamento mobile). Veja o [`.env.example`](.env.example) para a lista completa.
+Consulte o [`.env.example`](.env.example) para visualizar todas as variáveis disponíveis.
 
-> **Nota:** Sugiro configurar a porta do banco de dados diferente da porta onde está localizado o PostgreSQL nativo do Windows, caso tenha.
+> **Importante:** se o PostgreSQL já estiver instalado e executando diretamente no Windows, utilize uma porta diferente para o banco do Docker, caso haja conflito com a porta `5432`.
 
-Na primeira inicialização, o contêiner do PostgreSQL executa automaticamente o script **`backend/database/SistemaSkill.sql`**, responsável pela criação das tabelas e pela carga inicial do catálogo de skills (15 skills). O script é montado em `/docker-entrypoint-initdb.d/` e roda apenas na primeira criação do volume de dados.
+### Banco de dados
 
-> O frontend servido na porta `8081` utiliza um Nginx que encaminha as requisições `/api/*` para o serviço `backend` na porta `8080`.
+Na primeira inicialização, o PostgreSQL executa automaticamente o script [`SistemaSkill.sql`](backend/database/SistemaSkill.sql).
+
+O script:
+
+- cria as tabelas do sistema;
+- configura os relacionamentos;
+- insere o catálogo inicial com 15 skills.
+
+O arquivo é montado no diretório `/docker-entrypoint-initdb.d/` do container e é executado somente quando o volume do PostgreSQL é criado pela primeira vez.
+
+### Frontend Web
+
+O frontend Web é servido pelo Nginx na porta `8081`.
+
+As requisições destinadas a `/api/*` são encaminhadas automaticamente pelo Nginx para o backend Spring Boot, executando na porta `8080`.
+
+Dessa forma, o frontend utiliza a API através do mesmo domínio/host, sem precisar expor diretamente a porta do backend ao navegador.
 
 ---
 
