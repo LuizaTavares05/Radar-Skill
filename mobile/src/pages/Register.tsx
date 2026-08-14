@@ -6,10 +6,10 @@ import { StatusBar } from "expo-status-bar";
 import { font, radius } from "../theme";
 import type { Paleta } from "../theme";
 import { useTheme } from "../context/ThemeContext";
-import Logo from "../components/Logo";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import BrandPanel from "../components/BrandPanel";
+import Logo from "../components/Logo";
 import { toast } from "../components/Toast";
 import { cadastrar } from "../api/auth";
 import { ApiError } from "../api/client";
@@ -248,6 +248,16 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
             <Logo />
           </View>
           {form}
+          <View style={styles.mobileBrand}>
+            <BrandPanel
+              compact
+              hideLogo
+              title={"Junte-se a milhares de\ndesenvolvedores hoje."}
+              subtitle={
+                "Crie sua conta e comece a gerenciar sua stack de tecnologia profissional em minutos."
+              }
+            />
+          </View>
         </ScrollView>
       )}
     </SafeAreaView>
@@ -285,8 +295,17 @@ const createStyles = (c: Paleta) =>
       paddingHorizontal: 28,
       paddingVertical: 40,
     },
+    mobileBrand: {
+      width: "100%",
+      maxWidth: 384,
+      alignSelf: "center",
+      marginTop: 28,
+    },
     mobileLogo: {
-      marginBottom: 32,
+      width: "100%",
+      maxWidth: 384,
+      alignSelf: "center",
+      marginBottom: 28,
     },
     formContainer: {
       width: "100%",
