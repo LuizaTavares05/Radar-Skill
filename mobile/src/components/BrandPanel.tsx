@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Text, View } from "react-native";
 import Svg, { Circle, Pattern, Rect } from "react-native-svg";
-import { font } from "../theme";
+import { font, radius } from "../theme";
 import type { Paleta } from "../theme";
 import { useTheme } from "../context/ThemeContext";
 import Logo from "./Logo";
@@ -12,6 +12,7 @@ type BrandPanelProps = {
   title: string;
   subtitle: string;
   children?: ReactNode;
+  compact?: boolean;
 };
 
 function DotsPattern() {
@@ -26,7 +27,7 @@ function DotsPattern() {
   );
 }
 
-export default function BrandPanel({ title, subtitle, children }: BrandPanelProps) {
+export default function BrandPanel({ title, subtitle, children, compact = false }: BrandPanelProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
@@ -35,17 +36,17 @@ export default function BrandPanel({ title, subtitle, children }: BrandPanelProp
       colors={[colors.primary, colors.primaryVia, colors.primaryHover]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      style={styles.panel}
+      style={[styles.panel, compact && styles.panelCompact]}
     >
       <View style={styles.dots} pointerEvents="none">
         <DotsPattern />
       </View>
-      <View style={styles.content}>
+      <View style={[styles.content, compact && styles.contentCompact]}>
         <Logo light />
-        <View style={styles.spacer} />
+        <View style={compact ? styles.compactSpacer : styles.spacer} />
         <View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
+          <Text style={[styles.title, compact && styles.titleCompact]}>{title}</Text>
+          <Text style={[styles.subtitle, compact && styles.subtitleCompact]}>{subtitle}</Text>
           {children}
         </View>
       </View>
@@ -58,6 +59,11 @@ const createStyles = (c: Paleta) =>
     panel: {
       flex: 1,
     },
+    panelCompact: {
+      flex: 0,
+      borderRadius: radius.lg,
+      overflow: "hidden",
+    },
     dots: {
       ...StyleSheet.absoluteFillObject,
       opacity: 0.25,
@@ -66,8 +72,14 @@ const createStyles = (c: Paleta) =>
       flex: 1,
       padding: 48,
     },
+    contentCompact: {
+      padding: 24,
+    },
     spacer: {
       flex: 1,
+    },
+    compactSpacer: {
+      marginTop: 16,
     },
     title: {
       fontSize: 30,
@@ -76,10 +88,18 @@ const createStyles = (c: Paleta) =>
       lineHeight: 38,
       marginBottom: 12,
     },
+    titleCompact: {
+      fontSize: 22,
+      lineHeight: 28,
+    },
     subtitle: {
       fontSize: 16,
       fontFamily: font.regular,
       color: c.primaryLightest,
       lineHeight: 24,
+    },
+    subtitleCompact: {
+      fontSize: 14,
+      lineHeight: 20,
     },
   });

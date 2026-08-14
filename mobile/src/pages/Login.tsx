@@ -6,7 +6,6 @@ import { StatusBar } from "expo-status-bar";
 import { font, radius } from "../theme";
 import type { Paleta } from "../theme";
 import { useTheme } from "../context/ThemeContext";
-import Logo from "../components/Logo";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import BrandPanel from "../components/BrandPanel";
@@ -191,8 +190,16 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
           contentContainerStyle={styles.mobileContent}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.mobileLogo}>
-            <Logo />
+          <View style={styles.mobileBrand}>
+            <BrandPanel
+              compact
+              title={"Gerencie sua stack de tecnologia\ncom precisão."}
+              subtitle={
+                "Acompanhe skills, versões e níveis de proficiência. Fique à frente da sua evolução como desenvolvedor."
+              }
+            >
+              <StatsCards />
+            </BrandPanel>
           </View>
           {form}
         </ScrollView>
@@ -253,8 +260,11 @@ const createStyles = (c: Paleta) =>
       paddingHorizontal: 28,
       paddingVertical: 40,
     },
-    mobileLogo: {
-      marginBottom: 32,
+    mobileBrand: {
+      width: "100%",
+      maxWidth: 384,
+      alignSelf: "center",
+      marginBottom: 28,
     },
     formContainer: {
       width: "100%",
