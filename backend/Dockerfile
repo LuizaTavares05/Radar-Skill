@@ -1,14 +1,11 @@
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3.9-eclipse-temurin-21
 WORKDIR /app
 COPY backend/pom.xml .
 RUN mvn -B -q -DskipTests dependency:go-offline
 COPY backend/src ./src
 RUN mvn -B -q -DskipTests package
-
-FROM eclipse-temurin:21-jre-alpine AS runtime
-WORKDIR /app
-RUN addgroup -S app && adduser -S app -G app
-COPY --from=build /app/target/*.jar /app/app.jar
+RUN groupadd -r app && useradd -r -g app app
+RUN cp target/*.jar app.jar && rm -rf target
 USER app
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
