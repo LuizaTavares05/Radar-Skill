@@ -9,7 +9,7 @@ Aplicação Web de gerenciamento de skills, construída com React e TypeScript.
 - Vite (build e dev server)
 - Tailwind CSS 4
 - lucide-react (ícones)
-- Fetch API nativa (camada `src/api/client.ts`)
+- Axios
 - `localStorage` (persistência da sessão — `src/auth.ts`)
 
 ## Pré-requisitos

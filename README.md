@@ -9,7 +9,7 @@ Plataforma de gerenciamento de skills técnicas de desenvolvedores. O usuário r
 | Camada            | Tecnologias                                                                 |
 | ----------------- | --------------------------------------------------------------------------- |
 | Backend           | Java 21 · Spring Boot 4.1 · Spring Security (JWT) · Spring Data JPA · Springdoc OpenAPI · Lombok |
-| Frontend (Web)    | React 18 · TypeScript · Vite · Tailwind CSS 4 · Fetch API   |
+| Frontend (Web)    | React 18 · TypeScript · Vite · Tailwind CSS 4 · Axios   |
 | Mobile            | React Native 0.81 · Expo 54 · TypeScript · AsyncStorage |
 | Banco de dados    | PostgreSQL 16                                                               |
 | Infraestrutura    | Docker Compose · Nginx                                    |
