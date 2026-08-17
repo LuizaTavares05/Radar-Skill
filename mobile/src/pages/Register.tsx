@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { CheckCircle2, Eye, EyeOff, ShieldCheck, User, XCircle } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -14,10 +16,13 @@ import { toast } from "../components/Toast";
 import { cadastrar } from "../api/auth";
 import { ApiError } from "../api/client";
 
-type RegisterProps = {
-  onRegistered: () => void;
-  onGoLogin: () => void;
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Dashboard: undefined;
 };
+
+type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Register">;
 
 function forcaDaSenha(senha: string): { score: number; label: string; color: string } {
   let score = 0;
@@ -47,7 +52,8 @@ function parseFieldErrors(message: string): Record<string, string> {
   return errors;
 }
 
-export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
+export default function Register() {
+  const navigation = useNavigation<RegisterScreenNavigationProp>();
   const { colors, isDark } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { width } = useWindowDimensions();
@@ -90,7 +96,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
     try {
       await cadastrar({ nome: nome.trim(), email, senha, confirmacaoSenha });
       toast.success("Conta criada!", "Sua conta foi criada com sucesso.");
-      onRegistered();
+      navigation.navigate("Login");
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === 409) {
@@ -214,7 +220,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
           <View style={styles.dividerLine} />
         </View>
 
-        <Button variant="outline" title="Voltar para o login" onPress={onGoLogin} />
+        <Button variant="outline" title="Voltar para o login" onPress={() => navigation.navigate("Login")} />
       </View>
     </View>
   );

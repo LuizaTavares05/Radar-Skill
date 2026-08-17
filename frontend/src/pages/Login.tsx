@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Check, Eye, EyeOff, ShieldCheck, User } from "lucide-react";
 import Logo from "../components/Logo";
 import FloatingInput from "../components/FloatingInput";
@@ -19,13 +20,11 @@ import {
 } from "../auth";
 import { ApiError } from "../api/client";
 import { useTheme } from "../theme/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 
-type LoginProps = {
-  onLogin: (email: string, nome: string) => void;
-  onGoRegister: () => void;
-};
-
-export default function Login({ onLogin, onGoRegister }: LoginProps) {
+export default function Login() {
+  const navigate = useNavigate();
+  const { fazerLogin } = useAuth();
   const { definirTema } = useTheme();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -51,7 +50,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
     return Object.keys(e).length === 0;
   };
 
-  const fazerLogin = async () => {
+  const handleLogin = async () => {
     if (!validar()) return;
     setCarregando(true);
     try {
@@ -63,8 +62,9 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
       salvarSenha(senha, lembrar);
       salvarLembrar(lembrar);
       if (!lembrar) definirTema("light");
-      onLogin(email.trim(), nome);
+      fazerLogin(email.trim(), nome);
       toast.success("Bem-vindo de volta!", `Você entrou como ${email.trim()}.`);
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       const message = error instanceof ApiError ? error.message : "Erro ao conectar ao servidor.";
       toast.error("Falha no login", message);
@@ -193,7 +193,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
               </div>
 
               <button
-                onClick={fazerLogin}
+                onClick={handleLogin}
                 disabled={carregando}
                 className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-2xl font-semibold text-white bg-gradient-to-r from-primary to-primary-hover shadow-[0_4px_14px_rgba(10,78,119,0.35)] hover:shadow-[0_6px_22px_rgba(10,78,119,0.48)] hover:scale-[1.015] active:scale-[0.985] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200 mt-2"
               >
@@ -210,7 +210,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
               </div>
 
               <button
-                onClick={onGoRegister}
+                onClick={() => navigate("/register")}
                 className="w-full py-3.5 rounded-2xl font-semibold text-primary border-2 border-primary/25 hover:bg-primary/5 hover:border-primary/40 active:bg-primary/10 transition-all duration-200"
               >
                 Criar conta

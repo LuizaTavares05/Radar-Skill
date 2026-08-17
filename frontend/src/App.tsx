@@ -1,63 +1,66 @@
-import { useEffect, useState } from "react";
-import type { Page } from "./types";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Toaster, { toast } from "./components/Toast";
 import { useTheme } from "./theme/ThemeContext";
-import {
-  limparNomeUsuario,
-  limparToken,
-  obterEmailUsuario,
-  obterLembrarPersistido,
-  obterNomeUsuario,
-  restaurar,
-} from "./auth";
+import { useAuth } from "./context/AuthContext";
+import { obterLembrarPersistido } from "./auth";
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { email } = useAuth();
+  if (!email) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { email } = useAuth();
+  if (email) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
+}
 
 export default function App() {
   const { definirTema } = useTheme();
-  const [page, setPage] = useState<Page>("login");
-  const [emailUsuario, setEmailUsuario] = useState<string | null>(null);
-  const [nomeUsuario, setNomeUsuario] = useState<string | null>(null);
+  const { sair } = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (restaurar() && obterEmailUsuario()) {
-      setEmailUsuario(obterEmailUsuario());
-      setNomeUsuario(obterNomeUsuario());
-      setPage("dashboard");
-    }
-  }, []);
-
-  const fazerLogin = (email: string, nome: string) => {
-    setEmailUsuario(email);
-    setNomeUsuario(nome);
-    setPage("dashboard");
-  };
-
-  const sair = () => {
-    limparToken();
-    limparNomeUsuario();
-    setEmailUsuario(null);
-    setNomeUsuario(null);
-    setPage("login");
+  const handleLogout = () => {
+    sair();
     if (!obterLembrarPersistido()) definirTema("light");
     toast.info("Sessão encerrada", "Até logo!");
+    navigate("/login", { replace: true });
   };
-
-  const currentPage: Page = page === "dashboard" && !emailUsuario ? "login" : page;
 
   return (
     <>
       <Toaster />
-      {currentPage === "login" && (
-        <Login onLogin={fazerLogin} onGoRegister={() => setPage("register")} />
-      )}
-      {currentPage === "register" && (
-        <Register onRegistered={() => setPage("login")} onGoLogin={() => setPage("login")} />
-      )}
-      {currentPage === "dashboard" && emailUsuario && (
-        <Dashboard email={emailUsuario} nome={nomeUsuario ?? ""} onLogout={sair} />
-      )}
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
     </>
   );
 }

@@ -1,15 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CheckCircle2, Eye, EyeOff, ShieldCheck, User, XCircle } from "lucide-react";
 import Logo from "../components/Logo";
 import FloatingInput from "../components/FloatingInput";
 import { toast } from "../components/Toast";
 import { cadastrar } from "../api/auth";
 import { ApiError } from "../api/client";
-
-type RegisterProps = {
-  onRegistered: () => void;
-  onGoLogin: () => void;
-};
 
 function parseFieldErrors(message: string): Record<string, string> {
   const errors: Record<string, string> = {};
@@ -39,7 +35,8 @@ function forcaDaSenha(senha: string): { score: number; label: string; color: str
   return { score: 5, label: "Muito forte", color: "#2E7D5B" };
 }
 
-export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
+export default function Register() {
+  const navigate = useNavigate();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -78,7 +75,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
     try {
       await cadastrar({ nome: nome.trim(), email, senha, confirmacaoSenha });
       toast.success("Conta criada!", "Sua conta foi criada com sucesso.");
-      onRegistered();
+      navigate("/login", { replace: true });
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === 409) {
@@ -236,7 +233,7 @@ export default function Register({ onRegistered, onGoLogin }: RegisterProps) {
               </div>
 
               <button
-                onClick={onGoLogin}
+                onClick={() => navigate("/login")}
                 className="w-full py-3.5 rounded-2xl font-semibold text-primary border-2 border-primary/25 hover:bg-primary/5 hover:border-primary/40 active:bg-primary/10 transition-all duration-200"
               >
                 Voltar para o login

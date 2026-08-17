@@ -1,10 +1,16 @@
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { ThemeProvider } from "./theme/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
 import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>,
+  <BrowserRouter>
+    <ThemeProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ThemeProvider>
+  </BrowserRouter>,
 );

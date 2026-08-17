@@ -5,14 +5,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { font, radius } from "../theme";
 import type { Paleta } from "../theme";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
-
-type HeaderProps = {
-  nome: string;
-  email: string;
-  onLogout: () => void;
-};
 
 function primeiroNome(nome: string, email: string): string {
   const completo = nome.trim();
@@ -25,14 +20,15 @@ function primeiroNome(nome: string, email: string): string {
   return local.charAt(0).toUpperCase() + local.slice(1);
 }
 
-export default function Header({ nome, email, onLogout }: HeaderProps) {
+export default function Header() {
+  const { email, nome, sair } = useAuth();
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const showUserInfo = width >= 500;
   const showLogoutLabel = width >= 420;
-  const display = primeiroNome(nome, email);
+  const display = primeiroNome(nome ?? "", email ?? "");
 
   return (
     <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
@@ -56,7 +52,7 @@ export default function Header({ nome, email, onLogout }: HeaderProps) {
           </View>
           <ThemeToggle />
           <Pressable
-            onPress={onLogout}
+            onPress={sair}
             style={({ pressed }) => [styles.logout, pressed && styles.logoutPressed]}
             accessibilityLabel="Sair"
           >

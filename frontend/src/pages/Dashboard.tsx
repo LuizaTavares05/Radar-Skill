@@ -15,12 +15,10 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import { toast } from "../components/Toast";
 
 type DashboardProps = {
-  email: string;
-  nome: string;
   onLogout: () => void;
 };
 
-export default function Dashboard({ email, nome, onLogout }: DashboardProps) {
+export default function Dashboard({ onLogout }: DashboardProps) {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [search, setSearch] = useState("");
@@ -152,7 +150,7 @@ export default function Dashboard({ email, nome, onLogout }: DashboardProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header email={email} nome={nome} onLogout={onLogout} />
+      <Header />
 
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10">

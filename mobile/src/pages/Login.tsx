@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Check, Eye, EyeOff, ShieldCheck, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { font, radius } from "../theme";
 import type { Paleta } from "../theme";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import BrandPanel from "../components/BrandPanel";
@@ -27,10 +30,13 @@ import {
   salvarToken,
 } from "../auth";
 
-type LoginProps = {
-  onLogin: (email: string, nome: string) => void;
-  onGoRegister: () => void;
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Dashboard: undefined;
 };
+
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Login">;
 
 function StatsCards() {
   const { colors } = useTheme();
@@ -51,7 +57,9 @@ function StatsCards() {
   );
 }
 
-export default function Login({ onLogin, onGoRegister }: LoginProps) {
+export default function Login() {
+  const navigation = useNavigation<LoginScreenNavigationProp>();
+  const { fazerLogin } = useAuth();
   const { colors, isDark, definirTema } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { width } = useWindowDimensions();
@@ -80,7 +88,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
     return Object.keys(next).length === 0;
   };
 
-  const fazerLogin = async () => {
+  const handleLogin = async () => {
     if (!validar()) return;
     setCarregando(true);
     try {
@@ -92,7 +100,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
       salvarSenha(senha, lembrar);
       salvarLembrar(lembrar);
       if (!lembrar) definirTema("light");
-      onLogin(email.trim(), nome);
+      fazerLogin(email.trim(), nome);
       toast.success("Bem-vindo de volta!", `Você entrou como ${email.trim()}.`);
     } catch (error) {
       const message = error instanceof ApiError ? error.message : "Erro ao conectar ao servidor.";
@@ -151,7 +159,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
           <Text style={styles.forgot}>Esqueceu a senha?</Text>
         </View>
 
-        <Button title={carregando ? "Entrando..." : "Entrar"} loading={carregando} onPress={fazerLogin} disabled={carregando} />
+        <Button title={carregando ? "Entrando..." : "Entrar"} loading={carregando} onPress={handleLogin} disabled={carregando} />
 
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
@@ -159,7 +167,7 @@ export default function Login({ onLogin, onGoRegister }: LoginProps) {
           <View style={styles.dividerLine} />
         </View>
 
-        <Button variant="outline" title="Criar conta" onPress={onGoRegister} />
+        <Button variant="outline" title="Criar conta" onPress={() => navigation.navigate("Register")} />
       </View>
     </View>
   );

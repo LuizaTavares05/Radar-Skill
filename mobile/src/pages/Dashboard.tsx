@@ -10,6 +10,7 @@ import { obterToken } from "../auth";
 import { font, radius } from "../theme";
 import type { Paleta } from "../theme";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import SkillCard, { SkillCardSkeleton } from "../components/SkillCard";
@@ -20,12 +21,11 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import { toast } from "../components/Toast";
 
 type DashboardProps = {
-  email: string;
-  nome: string;
   onLogout: () => void;
 };
 
-export default function Dashboard({ email, nome, onLogout }: DashboardProps) {
+export default function Dashboard({ onLogout }: DashboardProps) {
+  const { email, nome } = useAuth();
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { width } = useWindowDimensions();
@@ -169,7 +169,7 @@ export default function Dashboard({ email, nome, onLogout }: DashboardProps) {
 
   return (
     <View style={styles.screen}>
-      <Header email={email} nome={nome} onLogout={onLogout} />
+      <Header />
       <ScrollView
         contentContainerStyle={styles.content}
         refreshControl={

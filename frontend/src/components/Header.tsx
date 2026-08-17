@@ -1,12 +1,7 @@
 import { LogOut } from "lucide-react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
-
-type HeaderProps = {
-  nome: string;
-  email: string;
-  onLogout: () => void;
-};
+import { useAuth } from "../context/AuthContext";
 
 function primeiroNome(nome: string, email: string): string {
   const completo = nome.trim();
@@ -19,8 +14,9 @@ function primeiroNome(nome: string, email: string): string {
   return local.charAt(0).toUpperCase() + local.slice(1);
 }
 
-export default function Header({ nome, email, onLogout }: HeaderProps) {
-  const display = primeiroNome(nome, email);
+export default function Header() {
+  const { email, nome, sair } = useAuth();
+  const display = primeiroNome(nome ?? "", email ?? "");
   return (
     <nav className="bg-card border-b border-border sticky top-0 z-30 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -37,7 +33,7 @@ export default function Header({ nome, email, onLogout }: HeaderProps) {
           </div>
           <ThemeToggle />
           <button
-            onClick={onLogout}
+            onClick={sair}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-muted hover:text-foreground hover:bg-surface transition-all duration-200 text-sm font-medium"
           >
             <LogOut size={16} />
