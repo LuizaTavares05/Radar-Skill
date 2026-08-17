@@ -9,10 +9,10 @@ Plataforma de gerenciamento de skills técnicas de desenvolvedores. O usuário r
 | Camada            | Tecnologias                                                                 |
 | ----------------- | --------------------------------------------------------------------------- |
 | Backend           | Java 21 · Spring Boot 4.1 · Spring Security (JWT) · Spring Data JPA · Springdoc OpenAPI · Lombok |
-| Frontend (Web)    | React 18 · TypeScript · Vite · Tailwind CSS 4 · Fetch API · lucide-react    |
-| Mobile            | React Native 0.81 · Expo 54 · TypeScript · AsyncStorage · lucide-react-native · react-native-svg |
+| Frontend (Web)    | React 18 · TypeScript · Vite · Tailwind CSS 4 · Fetch API   |
+| Mobile            | React Native 0.81 · Expo 54 · TypeScript · AsyncStorage |
 | Banco de dados    | PostgreSQL 16                                                               |
-| Infraestrutura    | Docker Compose · Nginx · Maven Wrapper                                      |
+| Infraestrutura    | Docker Compose · Nginx                                    |
 
 ## Estrutura do Repositório
 
@@ -26,6 +26,34 @@ Plataforma de gerenciamento de skills técnicas de desenvolvedores. O usuário r
 ├── docker-compose.yml  # Orquestração de banco, backend e frontend
 └── .env.example        # Modelo das variáveis de ambiente do Docker Compose
 ```
+
+## Funcionalidades
+
+### Autenticação
+
+- Cadastro de usuário
+- Login com autenticação JWT
+- Senha armazenada de forma criptografada
+- Opção de gravar senha para preenchimento automático no próximo acesso
+- Logout
+
+### Gerenciamento de Skills
+
+- Consulta ao catálogo de skills
+- Associação de skills à conta do usuário
+- Definição de nível de proficiência
+- Adição de descrição personalizada
+- Edição de skills associadas
+- Exclusão de skills
+- Pesquisa por nome
+- Filtro por categoria
+- Visualização das skills cadastradas
+
+### Plataformas
+
+- Aplicação Web responsiva
+- Aplicativo Mobile
+- Web e Mobile consumindo a mesma API REST
 
 ## Execução via Docker Compose
 
@@ -63,6 +91,7 @@ netsh advfirewall firewall add rule name="Docker Backend Private" dir=in action=
    ```bash
    docker compose up -d
    ```
+   > Na primeira execução, o Docker realizará o download das imagens e construção dos serviços. Execuções posteriores utilizarão o cache das imagens e camadas já construídas.
 
 3. Verifique os serviços:
 
@@ -72,6 +101,8 @@ netsh advfirewall firewall add rule name="Docker Backend Private" dir=in action=
 
 ### Serviços e portas
 
+As portas utilizadas pela aplicação podem ser configuradas no arquivo `.env` localizado na raiz do projeto.
+
 | Serviço   | Porta no host | Acesso                                        |
 | --------- | ------------- | --------------------------------------------- |
 | db        | 5432          | PostgreSQL (interno da rede Docker)           |
@@ -79,13 +110,9 @@ netsh advfirewall firewall add rule name="Docker Backend Private" dir=in action=
 | frontend  | 8081          | http://localhost:8081                         |
 | mobile    | 8082          | docker compose logs -f mobile (Expo Metro)    |
 
-> **Portas configuráveis:** todos os serviços têm portas padrão que já funcionam, mas podem ser alteradas conforme a necessidade via variáveis de ambiente no `.env` da raiz: `DB_PORT` (banco, padrão `5432`), `BACKEND_PORT` (backend, padrão `8080`), `FRONTEND_PORT` (frontend, padrão `8081`) e `MY_LOCAL_IP` (para o redirecionamento mobile). Veja o [`.env.example`](.env.example) para a lista completa.
+Consulte o [`.env.example`](.env.example) para visualizar todas as variáveis disponíveis.
 
-> **Nota:** Sugiro configurar a porta do banco de dados diferente da porta onde está localizado o PostgreSQL nativo do Windows, caso tenha.
-
-Na primeira inicialização, o contêiner do PostgreSQL executa automaticamente o script **`backend/database/SistemaSkill.sql`**, responsável pela criação das tabelas e pela carga inicial do catálogo de skills (15 skills). O script é montado em `/docker-entrypoint-initdb.d/` e roda apenas na primeira criação do volume de dados.
-
-> O frontend servido na porta `8081` utiliza um Nginx que encaminha as requisições `/api/*` para o serviço `backend` na porta `8080`.
+> **Importante:** se o PostgreSQL já estiver instalado e executando diretamente no Windows, utilize uma porta diferente para o banco do Docker, caso haja conflito com a porta `5432`.
 
 ---
 
